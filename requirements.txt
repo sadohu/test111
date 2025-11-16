@@ -1,0 +1,7 @@
+# Dependencias del proyecto Chatbot Gemini
+
+# Biblioteca oficial de Google para Generative AI
+google-generativeai>=0.3.0
+
+# Biblioteca para cargar variables de entorno desde archivo .env
+python-dotenv>=1.0.0
