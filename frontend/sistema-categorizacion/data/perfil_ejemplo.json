@@ -1,0 +1,30 @@
+{
+  "estudiante_id": "EST_EXPORT_001",
+  "grado": "3-4",
+  "fecha_creacion": "2025-11-16T20:30:19.128347",
+  "ultima_actualizacion": "2025-11-16T20:30:19.128347",
+  "estilo_aprendizaje": "visual",
+  "velocidad": "moderado",
+  "atencion": "media",
+  "interes": "cientifico",
+  "nivel_matematicas": "intermedio",
+  "nivel_lectura": "desarrollado",
+  "motivacion": "media",
+  "frustracion": "intermedio",
+  "trabajo": "colaborativo",
+  "energia": "vespertino",
+  "nivel_riesgo": "bajo",
+  "recomendaciones": [
+    "📊 Usar organizadores visuales, mapas mentales, diagramas y videos educativos",
+    "⏰ Organizar bloques de 20-25 minutos con descansos estructurados",
+    "📐 Consolidar operaciones básicas y gradualmente introducir problemas más complejos",
+    "📖 Incrementar complejidad de textos y trabajar inferencias y análisis",
+    "😊 Variar actividades y conectar aprendizaje con situaciones de la vida real",
+    "🤔 Ofrecer apoyo cuando se frustre y enseñar estrategias de afrontamiento",
+    "👥 Facilitar trabajo en equipo, proyectos grupales y aprendizaje entre pares",
+    "🔬 Incluir experimentos, indagación científica y descubrimiento",
+    "🌆 Reservar tareas complejas para después del mediodía"
+  ],
+  "categoria_principal": "El Científico Colaborativo",
+  "confianza_perfil": 60
+}

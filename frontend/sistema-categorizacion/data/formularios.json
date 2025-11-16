@@ -1,0 +1,833 @@
+{
+  "formularios": {
+    "1-2": {
+      "nombre": "Formulario para 1ro y 2do grado",
+      "rango_edad": "6-7 años",
+      "caracteristicas": [
+        "Lenguaje muy simple y directo",
+        "Apoyo visual con emojis/dibujos",
+        "Máximo 3 opciones por pregunta",
+        "Preguntas cortas (menos de 10 palabras)",
+        "Se puede leer en voz alta si es necesario"
+      ],
+      "preguntas": [
+        {
+          "id": "P1",
+          "pregunta": "¿Cómo te gusta aprender mejor?",
+          "categoria": "estilo_aprendizaje",
+          "opciones": [
+            {
+              "id": "A",
+              "emoji": "🎨",
+              "texto": "Viendo dibujos y colores",
+              "valor": "visual"
+            },
+            {
+              "id": "B",
+              "emoji": "👂",
+              "texto": "Escuchando historias",
+              "valor": "auditivo"
+            },
+            {
+              "id": "C",
+              "emoji": "✋",
+              "texto": "Haciendo cosas con mis manos",
+              "valor": "kinestesico"
+            }
+          ]
+        },
+        {
+          "id": "P2",
+          "pregunta": "¿Qué tan rápido entiendes las cosas nuevas?",
+          "categoria": "velocidad",
+          "opciones": [
+            {
+              "id": "A",
+              "emoji": "🐇",
+              "texto": "Muy rápido, como un conejito",
+              "valor": "rapido"
+            },
+            {
+              "id": "B",
+              "emoji": "🐢",
+              "texto": "Despacito, como una tortuga",
+              "valor": "pausado"
+            },
+            {
+              "id": "C",
+              "emoji": "🐕",
+              "texto": "Normal, como un perrito",
+              "valor": "moderado"
+            }
+          ]
+        },
+        {
+          "id": "P3",
+          "pregunta": "¿Cuánto tiempo puedes estar atento sin distraerte?",
+          "categoria": "atencion",
+          "opciones": [
+            {
+              "id": "A",
+              "emoji": "⭐⭐⭐",
+              "texto": "Mucho tiempo (puedo terminar todo mi trabajo)",
+              "valor": "alta"
+            },
+            {
+              "id": "B",
+              "emoji": "⭐⭐",
+              "texto": "Un ratito (necesito descansar)",
+              "valor": "media"
+            },
+            {
+              "id": "C",
+              "emoji": "⭐",
+              "texto": "Poquito (me distraigo fácil)",
+              "valor": "baja"
+            }
+          ]
+        },
+        {
+          "id": "P4",
+          "pregunta": "¿Qué te gusta hacer más?",
+          "categoria": "interes",
+          "opciones": [
+            {
+              "id": "A",
+              "emoji": "🎨",
+              "texto": "Dibujar y pintar",
+              "valor": "artistico"
+            },
+            {
+              "id": "B",
+              "emoji": "⚽",
+              "texto": "Jugar y correr",
+              "valor": "deportivo"
+            },
+            {
+              "id": "C",
+              "emoji": "📚",
+              "texto": "Escuchar cuentos",
+              "valor": "literario"
+            }
+          ]
+        },
+        {
+          "id": "P5",
+          "pregunta": "¿Cómo son las matemáticas para ti?",
+          "categoria": "nivel_matematicas",
+          "opciones": [
+            {
+              "id": "A",
+              "emoji": "😊",
+              "texto": "Fáciles (me gustan los números)",
+              "valor": "avanzado"
+            },
+            {
+              "id": "B",
+              "emoji": "😐",
+              "texto": "Normales (a veces fácil, a veces difícil)",
+              "valor": "intermedio"
+            },
+            {
+              "id": "C",
+              "emoji": "😕",
+              "texto": "Difíciles (me confundo)",
+              "valor": "basico"
+            }
+          ]
+        },
+        {
+          "id": "P6",
+          "pregunta": "¿Cómo lees?",
+          "categoria": "nivel_lectura",
+          "opciones": [
+            {
+              "id": "A",
+              "emoji": "📖",
+              "texto": "Leo solito y entiendo todo",
+              "valor": "experto"
+            },
+            {
+              "id": "B",
+              "emoji": "📕",
+              "texto": "Leo, pero a veces no entiendo",
+              "valor": "desarrollado"
+            },
+            {
+              "id": "C",
+              "emoji": "📘",
+              "texto": "Me cuesta leer, necesito ayuda",
+              "valor": "inicial"
+            }
+          ]
+        },
+        {
+          "id": "P7",
+          "pregunta": "¿Qué pasa cuando te enseñan algo nuevo?",
+          "categoria": "motivacion",
+          "opciones": [
+            {
+              "id": "A",
+              "emoji": "🤔",
+              "texto": "Hago muchas preguntas porque quiero aprender",
+              "valor": "alta"
+            },
+            {
+              "id": "B",
+              "emoji": "😊",
+              "texto": "Escucho y hago lo que me dicen",
+              "valor": "media"
+            },
+            {
+              "id": "C",
+              "emoji": "😴",
+              "texto": "Me aburro y quiero jugar",
+              "valor": "baja"
+            }
+          ]
+        },
+        {
+          "id": "P8",
+          "pregunta": "¿Qué haces cuando algo te sale mal?",
+          "categoria": "frustracion",
+          "opciones": [
+            {
+              "id": "A",
+              "emoji": "💪",
+              "texto": "Lo intento otra vez hasta que me salga",
+              "valor": "resiliente"
+            },
+            {
+              "id": "B",
+              "emoji": "😢",
+              "texto": "Me pongo triste y no quiero seguir",
+              "valor": "sensible"
+            },
+            {
+              "id": "C",
+              "emoji": "😐",
+              "texto": "Pido ayuda y lo intento de nuevo",
+              "valor": "intermedio"
+            }
+          ]
+        },
+        {
+          "id": "P9",
+          "pregunta": "¿Cómo prefieres trabajar?",
+          "categoria": "trabajo",
+          "opciones": [
+            {
+              "id": "A",
+              "emoji": "👤",
+              "texto": "Solo, yo puedo hacerlo",
+              "valor": "independiente"
+            },
+            {
+              "id": "B",
+              "emoji": "👥",
+              "texto": "Con mis amigos, es más divertido",
+              "valor": "colaborativo"
+            },
+            {
+              "id": "C",
+              "emoji": "👨‍🏫",
+              "texto": "Con la profesora ayudándome",
+              "valor": "guiado"
+            }
+          ]
+        },
+        {
+          "id": "P10",
+          "pregunta": "¿Cuándo tienes más energía?",
+          "categoria": "energia",
+          "opciones": [
+            {
+              "id": "A",
+              "emoji": "🌅",
+              "texto": "En la mañana (cuando llego al colegio)",
+              "valor": "matutino"
+            },
+            {
+              "id": "B",
+              "emoji": "🌆",
+              "texto": "En la tarde (después del recreo)",
+              "valor": "vespertino"
+            },
+            {
+              "id": "C",
+              "emoji": "☀️",
+              "texto": "Todo el día igual",
+              "valor": "flexible"
+            }
+          ]
+        }
+      ]
+    },
+    "3-4": {
+      "nombre": "Formulario para 3ro y 4to grado",
+      "rango_edad": "8-9 años",
+      "caracteristicas": [
+        "Lenguaje más elaborado pero claro",
+        "Opciones con descripciones cortas",
+        "3-4 opciones por pregunta",
+        "Introduce conceptos escolares más específicos"
+      ],
+      "preguntas": [
+        {
+          "id": "P1",
+          "pregunta": "¿Cómo aprendes mejor en clase?",
+          "categoria": "estilo_aprendizaje",
+          "opciones": [
+            {
+              "id": "A",
+              "emoji": "👁️",
+              "texto": "Cuando la profesora usa la pizarra, dibujos o videos",
+              "valor": "visual"
+            },
+            {
+              "id": "B",
+              "emoji": "👂",
+              "texto": "Cuando la profesora explica hablando y cuento lo que aprendí",
+              "valor": "auditivo"
+            },
+            {
+              "id": "C",
+              "emoji": "✋",
+              "texto": "Cuando hacemos experimentos o actividades con materiales",
+              "valor": "kinestesico"
+            },
+            {
+              "id": "D",
+              "emoji": "🔄",
+              "texto": "Me gusta de todas las formas",
+              "valor": "multimodal"
+            }
+          ]
+        },
+        {
+          "id": "P2",
+          "pregunta": "Cuando la profesora explica algo nuevo...",
+          "categoria": "velocidad",
+          "opciones": [
+            {
+              "id": "A",
+              "emoji": "🚀",
+              "texto": "Lo entiendo rápido y quiero hacer más ejercicios",
+              "valor": "rapido"
+            },
+            {
+              "id": "B",
+              "emoji": "🐢",
+              "texto": "Necesito que me lo explique varias veces con calma",
+              "valor": "pausado"
+            },
+            {
+              "id": "C",
+              "emoji": "⚖️",
+              "texto": "Lo entiendo después de 2 o 3 explicaciones",
+              "valor": "moderado"
+            }
+          ]
+        },
+        {
+          "id": "P3",
+          "pregunta": "¿Cuánto tiempo puedes concentrarte en una tarea?",
+          "categoria": "atencion",
+          "opciones": [
+            {
+              "id": "A",
+              "emoji": "⏰",
+              "texto": "Más de 30 minutos sin parar",
+              "valor": "alta"
+            },
+            {
+              "id": "B",
+              "emoji": "⏱️",
+              "texto": "Entre 15 y 20 minutos, después necesito un descanso",
+              "valor": "media"
+            },
+            {
+              "id": "C",
+              "emoji": "⏲️",
+              "texto": "Menos de 10 minutos, me distraigo con otras cosas",
+              "valor": "baja"
+            }
+          ]
+        },
+        {
+          "id": "P4",
+          "pregunta": "¿Qué actividad te emociona más?",
+          "categoria": "interes",
+          "opciones": [
+            {
+              "id": "A",
+              "emoji": "🎨",
+              "texto": "Arte y Cultura (dibujar, música, teatro)",
+              "valor": "artistico"
+            },
+            {
+              "id": "B",
+              "emoji": "⚽",
+              "texto": "Educación Física (deportes, juegos, competencias)",
+              "valor": "deportivo"
+            },
+            {
+              "id": "C",
+              "emoji": "🔬",
+              "texto": "Ciencia y Tecnología (experimentos, descubrir cómo funcionan las cosas)",
+              "valor": "cientifico"
+            },
+            {
+              "id": "D",
+              "emoji": "📖",
+              "texto": "Comunicación (leer libros, escribir historias)",
+              "valor": "literario"
+            },
+            {
+              "id": "E",
+              "emoji": "🤝",
+              "texto": "Personal Social (trabajar en equipo, ayudar a otros)",
+              "valor": "social"
+            }
+          ]
+        },
+        {
+          "id": "P5",
+          "pregunta": "En matemáticas, ¿cómo te va?",
+          "categoria": "nivel_matematicas",
+          "opciones": [
+            {
+              "id": "A",
+              "emoji": "😃",
+              "texto": "Me van bien, resuelvo problemas sin mucha ayuda",
+              "valor": "avanzado"
+            },
+            {
+              "id": "B",
+              "emoji": "😊",
+              "texto": "Me va normal, a veces necesito ayuda",
+              "valor": "intermedio"
+            },
+            {
+              "id": "C",
+              "emoji": "😟",
+              "texto": "Me cuesta mucho, necesito bastante apoyo",
+              "valor": "basico"
+            }
+          ]
+        },
+        {
+          "id": "P6",
+          "pregunta": "Cuando lees un texto...",
+          "categoria": "nivel_lectura",
+          "opciones": [
+            {
+              "id": "A",
+              "emoji": "📚",
+              "texto": "Leo rápido y entiendo todo sin problemas",
+              "valor": "experto"
+            },
+            {
+              "id": "B",
+              "emoji": "📖",
+              "texto": "Leo bien, pero a veces tengo que releer para entender",
+              "valor": "desarrollado"
+            },
+            {
+              "id": "C",
+              "emoji": "📕",
+              "texto": "Leo despacio y no siempre entiendo lo que dice",
+              "valor": "inicial"
+            }
+          ]
+        },
+        {
+          "id": "P7",
+          "pregunta": "¿Cómo te sientes al aprender cosas nuevas?",
+          "categoria": "motivacion",
+          "opciones": [
+            {
+              "id": "A",
+              "emoji": "🌟",
+              "texto": "Me emociona, siempre quiero saber más",
+              "valor": "alta"
+            },
+            {
+              "id": "B",
+              "emoji": "😊",
+              "texto": "Me gusta si el tema es interesante",
+              "valor": "media"
+            },
+            {
+              "id": "C",
+              "emoji": "😐",
+              "texto": "Prefiero hacer otras cosas, aprender es aburrido",
+              "valor": "baja"
+            }
+          ]
+        },
+        {
+          "id": "P8",
+          "pregunta": "Cuando un ejercicio te sale mal...",
+          "categoria": "frustracion",
+          "opciones": [
+            {
+              "id": "A",
+              "emoji": "💪",
+              "texto": "No me rindo, busco otra forma de hacerlo",
+              "valor": "resiliente"
+            },
+            {
+              "id": "B",
+              "emoji": "😢",
+              "texto": "Me frustro y ya no quiero seguir",
+              "valor": "sensible"
+            },
+            {
+              "id": "C",
+              "emoji": "🤔",
+              "texto": "Me molesta, pero con ayuda puedo intentarlo de nuevo",
+              "valor": "intermedio"
+            }
+          ]
+        },
+        {
+          "id": "P9",
+          "pregunta": "¿Cómo prefieres hacer tus tareas?",
+          "categoria": "trabajo",
+          "opciones": [
+            {
+              "id": "A",
+              "emoji": "🧑",
+              "texto": "Solo, me concentro mejor",
+              "valor": "independiente"
+            },
+            {
+              "id": "B",
+              "emoji": "👥",
+              "texto": "En grupo, aprendo más con mis compañeros",
+              "valor": "colaborativo"
+            },
+            {
+              "id": "C",
+              "emoji": "👨‍🏫",
+              "texto": "Con la profesora o mi mamá/papá guiándome paso a paso",
+              "valor": "guiado"
+            }
+          ]
+        },
+        {
+          "id": "P10",
+          "pregunta": "¿En qué momento del día rindes mejor?",
+          "categoria": "energia",
+          "opciones": [
+            {
+              "id": "A",
+              "emoji": "🌄",
+              "texto": "En las primeras horas de clase (mañana)",
+              "valor": "matutino"
+            },
+            {
+              "id": "B",
+              "emoji": "🌅",
+              "texto": "Después del recreo (tarde)",
+              "valor": "vespertino"
+            },
+            {
+              "id": "C",
+              "emoji": "☀️",
+              "texto": "No hay diferencia, rindo igual todo el día",
+              "valor": "flexible"
+            }
+          ]
+        }
+      ]
+    },
+    "5-6": {
+      "nombre": "Formulario para 5to y 6to grado",
+      "rango_edad": "10-11 años",
+      "caracteristicas": [
+        "Lenguaje más técnico y reflexivo",
+        "Opciones con justificaciones",
+        "4-5 opciones por pregunta",
+        "Promueve autoevaluación consciente"
+      ],
+      "preguntas": [
+        {
+          "id": "P1",
+          "pregunta": "Identifica tu estilo de aprendizaje predominante",
+          "categoria": "estilo_aprendizaje",
+          "opciones": [
+            {
+              "id": "A",
+              "emoji": "👁️",
+              "texto": "Visual - Aprendo mejor con esquemas, mapas conceptuales, videos y presentaciones visuales",
+              "valor": "visual"
+            },
+            {
+              "id": "B",
+              "emoji": "👂",
+              "texto": "Auditivo - Prefiero explicaciones orales, debates, podcasts y puedo repetir lo que escucho",
+              "valor": "auditivo"
+            },
+            {
+              "id": "C",
+              "emoji": "✋",
+              "texto": "Kinestésico - Necesito experimentar, manipular materiales y aprender haciendo",
+              "valor": "kinestesico"
+            },
+            {
+              "id": "D",
+              "emoji": "🔄",
+              "texto": "Multimodal - Combino varios estilos según la situación",
+              "valor": "multimodal"
+            }
+          ]
+        },
+        {
+          "id": "P2",
+          "pregunta": "Evalúa tu velocidad de procesamiento de información",
+          "categoria": "velocidad",
+          "opciones": [
+            {
+              "id": "A",
+              "emoji": "⚡",
+              "texto": "Rápida - Capto conceptos nuevos rápidamente, me aburro con repeticiones",
+              "valor": "rapido"
+            },
+            {
+              "id": "B",
+              "emoji": "🐢",
+              "texto": "Pausada - Necesito tiempo y varias explicaciones para comprender bien",
+              "valor": "pausado"
+            },
+            {
+              "id": "C",
+              "emoji": "⚖️",
+              "texto": "Moderada - Entiendo con 2-3 explicaciones y ejemplos",
+              "valor": "moderado"
+            }
+          ]
+        },
+        {
+          "id": "P3",
+          "pregunta": "¿Cuál es tu capacidad de concentración sostenida?",
+          "categoria": "atencion",
+          "opciones": [
+            {
+              "id": "A",
+              "emoji": "⭐⭐⭐",
+              "texto": "Alta - Puedo concentrarme 30-45 minutos sin interrupciones",
+              "valor": "alta"
+            },
+            {
+              "id": "B",
+              "emoji": "⭐⭐",
+              "texto": "Media - Mantengo atención por 15-25 minutos, luego necesito pausas",
+              "valor": "media"
+            },
+            {
+              "id": "C",
+              "emoji": "⭐",
+              "texto": "Baja - Me cuesta concentrarme más de 10 minutos, me distraigo fácilmente",
+              "valor": "baja"
+            }
+          ]
+        },
+        {
+          "id": "P4",
+          "pregunta": "¿Qué área del conocimiento te apasiona más?",
+          "categoria": "interes",
+          "opciones": [
+            {
+              "id": "A",
+              "emoji": "🎨",
+              "texto": "Arte y Cultura - Artes visuales, música, danza, teatro",
+              "valor": "artistico"
+            },
+            {
+              "id": "B",
+              "emoji": "⚽",
+              "texto": "Educación Física - Deportes, actividades físicas, competencias",
+              "valor": "deportivo"
+            },
+            {
+              "id": "C",
+              "emoji": "🔬",
+              "texto": "Ciencia y Tecnología - Experimentos, tecnología, robótica, programación",
+              "valor": "cientifico"
+            },
+            {
+              "id": "D",
+              "emoji": "📖",
+              "texto": "Comunicación - Lectura, escritura creativa, redacción, idiomas",
+              "valor": "literario"
+            },
+            {
+              "id": "E",
+              "emoji": "🤝",
+              "texto": "Personal Social - Historia, geografía, ciudadanía, trabajo colaborativo",
+              "valor": "social"
+            },
+            {
+              "id": "F",
+              "emoji": "🔢",
+              "texto": "Matemática - Números, lógica, resolución de problemas abstractos",
+              "valor": "matematico"
+            }
+          ]
+        },
+        {
+          "id": "P5",
+          "pregunta": "Autoevalúa tu nivel en matemáticas",
+          "categoria": "nivel_matematicas",
+          "opciones": [
+            {
+              "id": "A",
+              "emoji": "🏆",
+              "texto": "Avanzado - Resuelvo problemas complejos, me gustan los desafíos matemáticos",
+              "valor": "avanzado"
+            },
+            {
+              "id": "B",
+              "emoji": "📊",
+              "texto": "Intermedio - Domino operaciones básicas, pero los problemas difíciles me cuestan",
+              "valor": "intermedio"
+            },
+            {
+              "id": "C",
+              "emoji": "📉",
+              "texto": "Básico - Tengo dificultades con operaciones y necesito apoyo constante",
+              "valor": "basico"
+            }
+          ]
+        },
+        {
+          "id": "P6",
+          "pregunta": "Autoevalúa tu comprensión lectora",
+          "categoria": "nivel_lectura",
+          "opciones": [
+            {
+              "id": "A",
+              "emoji": "📚",
+              "texto": "Experto - Leo fluidamente, comprendo textos complejos y puedo hacer análisis crítico",
+              "valor": "experto"
+            },
+            {
+              "id": "B",
+              "emoji": "📖",
+              "texto": "Desarrollado - Leo bien, entiendo ideas principales pero a veces pierdo detalles",
+              "valor": "desarrollado"
+            },
+            {
+              "id": "C",
+              "emoji": "📕",
+              "texto": "Inicial - Leo con dificultad, me cuesta entender lo que leo",
+              "valor": "inicial"
+            }
+          ]
+        },
+        {
+          "id": "P7",
+          "pregunta": "¿Cómo describes tu motivación para aprender?",
+          "categoria": "motivacion",
+          "opciones": [
+            {
+              "id": "A",
+              "emoji": "🔥",
+              "texto": "Alta - Soy curioso, investigo por mi cuenta, disfruto aprender cosas nuevas",
+              "valor": "alta"
+            },
+            {
+              "id": "B",
+              "emoji": "😊",
+              "texto": "Media - Aprendo lo que me enseñan, pero no busco información adicional",
+              "valor": "media"
+            },
+            {
+              "id": "C",
+              "emoji": "😐",
+              "texto": "Baja - Estudiar me aburre, prefiero hacer otras actividades",
+              "valor": "baja"
+            }
+          ]
+        },
+        {
+          "id": "P8",
+          "pregunta": "¿Cómo manejas la frustración ante errores?",
+          "categoria": "frustracion",
+          "opciones": [
+            {
+              "id": "A",
+              "emoji": "💪",
+              "texto": "Resiliente - Los errores son oportunidades de aprendizaje, persisto hasta lograrlo",
+              "valor": "resiliente"
+            },
+            {
+              "id": "B",
+              "emoji": "😢",
+              "texto": "Sensible - Me desanimo fácilmente y evito tareas difíciles",
+              "valor": "sensible"
+            },
+            {
+              "id": "C",
+              "emoji": "🤔",
+              "texto": "Intermedio - Me frustro, pero con apoyo puedo continuar",
+              "valor": "intermedio"
+            }
+          ]
+        },
+        {
+          "id": "P9",
+          "pregunta": "¿Cuál es tu modalidad de trabajo preferida?",
+          "categoria": "trabajo",
+          "opciones": [
+            {
+              "id": "A",
+              "emoji": "🧑",
+              "texto": "Independiente - Prefiero trabajar solo, soy autodidacta y organizado",
+              "valor": "independiente"
+            },
+            {
+              "id": "B",
+              "emoji": "👥",
+              "texto": "Colaborativo - Aprendo mejor en equipo, compartiendo ideas con compañeros",
+              "valor": "colaborativo"
+            },
+            {
+              "id": "C",
+              "emoji": "👨‍🏫",
+              "texto": "Guiado - Necesito instrucciones claras y supervisión del profesor",
+              "valor": "guiado"
+            }
+          ]
+        },
+        {
+          "id": "P10",
+          "pregunta": "¿Cuándo experimentas tu pico de energía y concentración?",
+          "categoria": "energia",
+          "opciones": [
+            {
+              "id": "A",
+              "emoji": "🌅",
+              "texto": "Matutino - Soy más productivo en las primeras horas del día",
+              "valor": "matutino"
+            },
+            {
+              "id": "B",
+              "emoji": "🌆",
+              "texto": "Vespertino - Rindo mejor después del mediodía",
+              "valor": "vespertino"
+            },
+            {
+              "id": "C",
+              "emoji": "☀️",
+              "texto": "Flexible - Mi rendimiento es constante durante todo el día",
+              "valor": "flexible"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
