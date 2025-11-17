@@ -12,6 +12,13 @@ import {
   HealthCheckResponse,
   ErrorResponse,
   CursoEnum,
+  // Tracking
+  CrearSesionRequest,
+  CrearSesionResponse,
+  RegistrarRespuestaRequest,
+  RegistrarRespuestaResponse,
+  CompletarSesionResponse,
+  ObtenerEstadisticasEstudianteResponse,
 } from "@/types/ejercicios";
 
 // ============================================================================
@@ -171,6 +178,72 @@ class EjerciciosAPIClient {
    */
   async listarPerfiles(): Promise<any> {
     const response = await this.client.get("/api/perfiles");
+    return response.data;
+  }
+
+  // ==========================================================================
+  // ENDPOINTS DE TRACKING
+  // ==========================================================================
+
+  /**
+   * Crear una nueva sesión de ejercicios
+   */
+  async crearSesion(request: CrearSesionRequest): Promise<CrearSesionResponse> {
+    const response = await this.client.post<CrearSesionResponse>(
+      "/api/sesiones/crear",
+      request
+    );
+    return response.data;
+  }
+
+  /**
+   * Registrar una respuesta en una sesión
+   */
+  async registrarRespuesta(
+    sesionId: string,
+    request: RegistrarRespuestaRequest
+  ): Promise<RegistrarRespuestaResponse> {
+    const response = await this.client.post<RegistrarRespuestaResponse>(
+      `/api/sesiones/${sesionId}/responder`,
+      request
+    );
+    return response.data;
+  }
+
+  /**
+   * Completar una sesión
+   */
+  async completarSesion(sesionId: string): Promise<CompletarSesionResponse> {
+    const response = await this.client.post<CompletarSesionResponse>(
+      `/api/sesiones/${sesionId}/completar`,
+      { fecha_fin: new Date().toISOString() }
+    );
+    return response.data;
+  }
+
+  /**
+   * Obtener estadísticas de un estudiante
+   */
+  async obtenerEstadisticasEstudiante(
+    estudianteId: string
+  ): Promise<ObtenerEstadisticasEstudianteResponse> {
+    const response = await this.client.get<ObtenerEstadisticasEstudianteResponse>(
+      `/api/estudiantes/${estudianteId}/estadisticas`
+    );
+    return response.data;
+  }
+
+  /**
+   * Listar sesiones de un estudiante
+   */
+  async listarSesionesEstudiante(
+    estudianteId: string,
+    limite: number = 10
+  ): Promise<any> {
+    const response = await this.client.get(
+      `/api/estudiantes/${estudianteId}/sesiones`,
+      { params: { limite } }
+    );
     return response.data;
   }
 }

@@ -38,6 +38,10 @@ export default function HomePage() {
   // Tiempo
   const [tiempoInicio, setTiempoInicio] = useState<number>(0);
 
+  // Tracking - sesión en backend
+  const [sesionId, setSesionId] = useState<string>("");
+  const [nivelDeterminado, setNivelDeterminado] = useState<string>("");
+
   const ejercicioActual = ejercicios[indiceActual];
   const esUltimoEjercicio = indiceActual === ejercicios.length - 1;
 
@@ -48,6 +52,7 @@ export default function HomePage() {
     setEstado("cargando");
 
     try {
+      // 1. Generar ejercicios con Gemini
       const response = await apiClient.generarEjercicios({
         estudiante_id: estudianteId || "DEMO001",
         curso,
@@ -58,6 +63,24 @@ export default function HomePage() {
         curso === CursoEnum.MATEMATICAS
           ? response.ejercicios_matematicas || []
           : response.ejercicios_verbales || [];
+
+      // 2. Crear sesión en backend para tracking
+      try {
+        const sesionResponse = await apiClient.crearSesion({
+          estudiante_id: estudianteId || "DEMO001",
+          curso,
+          ejercicios_ids: ejerciciosGenerados.map((e) => e.id),
+          nivel_determinado: response.nivel_determinado,
+          perfil_usado: response.perfil_usado,
+        });
+
+        setSesionId(sesionResponse.sesion_id);
+        setNivelDeterminado(response.nivel_determinado);
+        console.log("✅ Sesión creada:", sesionResponse.sesion_id);
+      } catch (trackingError) {
+        console.warn("⚠️ Error creando sesión (continuando sin tracking):", trackingError);
+        // Continuar sin tracking si falla
+      }
 
       setEjercicios(ejerciciosGenerados);
       setIndiceActual(0);
@@ -76,7 +99,7 @@ export default function HomePage() {
   /**
    * Manejar respuesta del estudiante
    */
-  const manejarRespuesta = (opcion: string) => {
+  const manejarRespuesta = async (opcion: string) => {
     if (respuestaSeleccionada) return; // Ya respondió
 
     setRespuestaSeleccionada(opcion);
@@ -85,7 +108,10 @@ export default function HomePage() {
     const correcta = opcion === ejercicioActual.respuesta_correcta;
     setEsCorrecta(correcta);
 
-    // Guardar respuesta
+    // Calcular tiempo de respuesta en segundos
+    const tiempoRespuestaSegundos = Math.round((tiempoFin - tiempoInicio) / 1000);
+
+    // Guardar respuesta localmente
     const respuesta: RespuestaEstudiante = {
       ejercicio_id: ejercicioActual.id,
       opcion_seleccionada: opcion,
@@ -96,6 +122,22 @@ export default function HomePage() {
 
     setRespuestas([...respuestas, respuesta]);
 
+    // Registrar respuesta en backend (tracking)
+    if (sesionId) {
+      try {
+        await apiClient.registrarRespuesta(sesionId, {
+          ejercicio_id: ejercicioActual.id,
+          opcion_seleccionada: opcion,
+          es_correcta: correcta,
+          tiempo_respuesta_segundos: tiempoRespuestaSegundos,
+        });
+        console.log("✅ Respuesta registrada en backend");
+      } catch (trackingError) {
+        console.warn("⚠️ Error registrando respuesta:", trackingError);
+        // Continuar sin tracking si falla
+      }
+    }
+
     // Mostrar feedback después de un breve delay
     setTimeout(() => {
       setMostrarFeedback(true);
@@ -105,11 +147,20 @@ export default function HomePage() {
   /**
    * Continuar al siguiente ejercicio
    */
-  const continuarSiguiente = () => {
+  const continuarSiguiente = async () => {
     setMostrarFeedback(false);
     setRespuestaSeleccionada("");
 
     if (esUltimoEjercicio) {
+      // Completar sesión en backend
+      if (sesionId) {
+        try {
+          const result = await apiClient.completarSesion(sesionId);
+          console.log("✅ Sesión completada:", result.estadisticas);
+        } catch (trackingError) {
+          console.warn("⚠️ Error completando sesión:", trackingError);
+        }
+      }
       setEstado("completado");
     } else {
       setIndiceActual(indiceActual + 1);
@@ -127,6 +178,8 @@ export default function HomePage() {
     setRespuestas([]);
     setRespuestaSeleccionada("");
     setMostrarFeedback(false);
+    setSesionId("");
+    setNivelDeterminado("");
   };
 
   // Calcular estadísticas
