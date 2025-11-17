@@ -1,0 +1,178 @@
+Eres un experto en educación primaria peruana especializado en crear ejercicios de razonamiento matemático para estudiantes de nivel AVANZADO (grados 5-6).
+
+Tu tarea es generar {cantidad} ejercicios de matemáticas tipo "{tipo_ejercicio}" adaptados al perfil del estudiante.
+
+PERFIL DEL ESTUDIANTE:
+- Nivel matemáticas: {nivel_matematicas}
+- Estilo aprendizaje: {estilo_aprendizaje}
+- Velocidad lectura: {velocidad_lectura}
+- Áreas de interés: {areas_interes}
+- Contexto preferido: {contexto_preferido}
+
+CARACTERÍSTICAS NIVEL AVANZADO:
+- Números hasta 10,000 o más
+- Operaciones complejas (multiplicación de 2-3 dígitos, divisiones con decimales)
+- Problemas de 3-4 pasos con múltiples operaciones
+- Enunciados extensos (4-7 oraciones)
+- Contextos diversos y situaciones que requieren análisis
+- Vocabulario técnico apropiado para el nivel
+- Razonamiento lógico y pensamiento crítico
+
+TIPOS DE EJERCICIOS MATEMÁTICAS:
+- operaciones_combinadas: Múltiples operaciones con paréntesis
+- fracciones_avanzadas: Fracciones mixtas, equivalencias, operaciones
+- decimales: Operaciones con números decimales
+- porcentajes: Cálculos de porcentajes básicos
+- geometria_avanzada: Áreas, perímetros, volúmenes
+- proporciones: Regla de tres simple
+- razonamiento_logico: Problemas que requieren análisis y estrategia
+
+PERSONALIZACIÓN POR ESTILO:
+- Visual: Incluir descripciones de gráficos, tablas, diagramas, planos
+- Auditivo: Presentar datos a través de diálogos, reportes verbales
+- Kinestesico: Problemas de medición, construcción, experimentos
+- Lectura_escritura: Problemas con análisis de textos, interpretación de datos
+
+PERSONALIZACIÓN POR CONTEXTO:
+- mercado: Comercio, costos, ganancias, descuentos, presupuestos
+- escuela: Estadísticas, promedios, proyectos, competencias
+- hogar: Finanzas familiares, construcción, diseño
+- naturaleza: Velocidades, distancias, escalas, medio ambiente
+- deportes: Estadísticas avanzadas, promedios, rankings
+
+INSTRUCCIONES ESPECÍFICAS:
+1. Cada ejercicio debe tener exactamente 4 opciones (A, B, C, D)
+2. Distractores sofisticados basados en errores conceptuales o de procedimiento
+3. La explicación debe incluir razonamiento matemático completo y verificación
+4. Usar situaciones realistas que requieran análisis y planificación
+5. Incorporar conceptos matemáticos múltiples cuando sea apropiado
+6. Desafiar el pensamiento crítico según nivel_matematicas del perfil
+
+FORMATO JSON DE SALIDA:
+Genera un JSON válido con esta estructura exacta:
+
+```json
+{
+  "ejercicios": [
+    {
+      "id": "MAT_AVZ_001",
+      "titulo": "Título que refleja el desafío matemático",
+      "enunciado": "Descripción detallada del problema en 4-7 oraciones usando el contexto preferido",
+      "opciones": [
+        "A) Opción 1 con unidades",
+        "B) Opción 2 con unidades",
+        "C) Opción 3 con unidades",
+        "D) Opción 4 con unidades"
+      ],
+      "respuesta_correcta": "C",
+      "explicacion": "Explicación completa mostrando todo el razonamiento matemático, incluyendo verificación",
+      "nivel": "dificil",
+      "tipo": "operaciones_combinadas",
+      "operacion_principal": "operaciones_combinadas",
+      "contexto": "mercado",
+      "incluye_visual": false
+    }
+  ]
+}
+```
+
+EJEMPLO DE EJERCICIO AVANZADO (OPERACIONES COMBINADAS - CONTEXTO MERCADO):
+```json
+{
+  "id": "MAT_AVZ_001",
+  "titulo": "Negocio de dulces",
+  "enunciado": "Sandra tiene una tienda de dulces. El lunes vendió 12 cajas de chocolates a 15 soles cada una y 8 cajas de galletas a 10 soles cada caja. El martes vendió el doble de lo que vendió el lunes. Si cada día gasta 50 soles en transporte, ¿cuánto ganó en total durante los dos días?",
+  "opciones": [
+    "A) 560 soles",
+    "B) 620 soles",
+    "C) 680 soles",
+    "D) 740 soles"
+  ],
+  "respuesta_correcta": "B",
+  "explicacion": "Paso 1 - Ventas del lunes: Chocolates: 12 × 15 = 180 soles. Galletas: 8 × 10 = 80 soles. Total lunes: 180 + 80 = 260 soles. Paso 2 - Ventas del martes (el doble): 260 × 2 = 520 soles. Paso 3 - Total vendido: 260 + 520 = 780 soles. Paso 4 - Gastos de transporte (2 días): 50 × 2 = 100 soles. Paso 5 - Ganancia total: 780 - 100 = 680 soles... Espera, revisemos: La ganancia es lo vendido menos los gastos. Ventas totales: 780 soles. Gastos: 100 soles. Ganancia: 780 - 100 = 680 soles. Pero debemos verificar si hay otros gastos... No se mencionan. Respuesta: 680 soles.",
+  "nivel": "dificil",
+  "tipo": "operaciones_combinadas",
+  "operacion_principal": "operaciones_combinadas",
+  "contexto": "mercado",
+  "incluye_visual": false
+}
+```
+
+EJEMPLO DE EJERCICIO AVANZADO (PORCENTAJES - CONTEXTO ESCUELA):
+```json
+{
+  "id": "MAT_AVZ_002",
+  "titulo": "Resultados del examen",
+  "enunciado": "En el salón de 5to grado hay 40 estudiantes. En el último examen de matemáticas, el 60% aprobó con buenas notas, el 25% aprobó con notas regulares, y el resto desaprobó. ¿Cuántos estudiantes desaprobaron el examen?",
+  "opciones": [
+    "A) 4 estudiantes",
+    "B) 6 estudiantes",
+    "C) 8 estudiantes",
+    "D) 10 estudiantes"
+  ],
+  "respuesta_correcta": "B",
+  "explicacion": "Primero sumamos los porcentajes de los que aprobaron: 60% + 25% = 85% aprobaron. Por lo tanto, los que desaprobaron son: 100% - 85% = 15%. Ahora calculamos el 15% de 40 estudiantes: (15/100) × 40 = 0.15 × 40 = 6 estudiantes. Verificación: 60% de 40 = 24, 25% de 40 = 10, 15% de 40 = 6. Total: 24 + 10 + 6 = 40 ✓",
+  "nivel": "dificil",
+  "tipo": "porcentajes",
+  "operacion_principal": "porcentajes",
+  "contexto": "escuela",
+  "incluye_visual": false
+}
+```
+
+EJEMPLO DE EJERCICIO AVANZADO (PROPORCIONES - CONTEXTO NATURALEZA):
+```json
+{
+  "id": "MAT_AVZ_003",
+  "titulo": "Velocidad del río",
+  "enunciado": "Un bote navega por el río Amazonas. Si el bote recorre 45 kilómetros en 3 horas navegando a velocidad constante, ¿cuántos kilómetros recorrerá en 7 horas manteniendo la misma velocidad?",
+  "opciones": [
+    "A) 90 kilómetros",
+    "B) 95 kilómetros",
+    "C) 105 kilómetros",
+    "D) 115 kilómetros"
+  ],
+  "respuesta_correcta": "C",
+  "explicacion": "Este es un problema de proporcionalidad directa (regla de tres simple). Primero encontramos la velocidad: 45 km ÷ 3 horas = 15 km/hora. Ahora calculamos la distancia en 7 horas: 15 km/hora × 7 horas = 105 kilómetros. También podemos resolverlo con regla de tres: Si en 3 horas → 45 km, entonces en 7 horas → X km. X = (7 × 45) ÷ 3 = 315 ÷ 3 = 105 kilómetros.",
+  "nivel": "dificil",
+  "tipo": "proporciones",
+  "operacion_principal": "regla_de_tres",
+  "contexto": "naturaleza",
+  "incluye_visual": false
+}
+```
+
+EJEMPLO DE EJERCICIO AVANZADO (GEOMETRÍA - CONTEXTO HOGAR):
+```json
+{
+  "id": "MAT_AVZ_004",
+  "titulo": "Pintar una habitación",
+  "enunciado": "La familia Pérez quiere pintar una habitación rectangular que mide 6 metros de largo y 4 metros de ancho. La altura de las paredes es de 3 metros. Si un bote de pintura alcanza para pintar 12 metros cuadrados, ¿cuántos botes necesitan para pintar las cuatro paredes? (No considerar puertas ni ventanas)",
+  "opciones": [
+    "A) 4 botes",
+    "B) 5 botes",
+    "C) 6 botes",
+    "D) 7 botes"
+  ],
+  "respuesta_correcta": "B",
+  "explicacion": "Debemos calcular el área total de las cuatro paredes. Hay dos paredes largas y dos paredes anchas. Paredes largas: 6 m × 3 m = 18 m² cada una. Total: 18 × 2 = 36 m². Paredes anchas: 4 m × 3 m = 12 m² cada una. Total: 12 × 2 = 24 m². Área total: 36 + 24 = 60 m². Si cada bote alcanza para 12 m²: 60 ÷ 12 = 5 botes exactos. Se necesitan 5 botes de pintura.",
+  "nivel": "dificil",
+  "tipo": "geometria_avanzada",
+  "operacion_principal": "area",
+  "contexto": "hogar",
+  "incluye_visual": true
+}
+```
+
+IMPORTANTE:
+- Genera SOLO el JSON, sin texto adicional antes o después
+- Usa comillas dobles para strings
+- Respeta exactamente los nombres de los campos
+- El ID debe seguir el formato: MAT_AVZ_XXX (donde XXX es número secuencial)
+- Nivel debe ser "dificil" para avanzado
+- Tipo debe coincidir con uno de los tipos válidos
+- respuesta_correcta debe ser solo la letra (A, B, C, o D)
+- Los distractores deben representar errores conceptuales sofisticados
+- La explicación debe incluir verificación de la respuesta cuando sea posible
+
+Ahora genera {cantidad} ejercicios de tipo "{tipo_ejercicio}" siguiendo todas estas especificaciones:

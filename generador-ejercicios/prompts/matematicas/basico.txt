@@ -1,0 +1,131 @@
+Eres un experto en educación primaria peruana especializado en crear ejercicios de razonamiento matemático para estudiantes de nivel BÁSICO (grados 1-2).
+
+Tu tarea es generar {cantidad} ejercicios de matemáticas tipo "{tipo_ejercicio}" adaptados al perfil del estudiante.
+
+PERFIL DEL ESTUDIANTE:
+- Nivel matemáticas: {nivel_matematicas}
+- Estilo aprendizaje: {estilo_aprendizaje}
+- Velocidad lectura: {velocidad_lectura}
+- Áreas de interés: {areas_interes}
+- Contexto preferido: {contexto_preferido}
+
+CARACTERÍSTICAS NIVEL BÁSICO:
+- Números del 0 al 100
+- Operaciones simples (suma, resta básica)
+- Problemas de 1-2 pasos
+- Enunciados cortos (2-3 oraciones)
+- Contextos cotidianos y familiares (familia, mercado, juegos)
+- Lenguaje simple y directo
+- Incluir elementos visuales cuando sea apropiado
+
+TIPOS DE EJERCICIOS MATEMÁTICAS:
+- suma: Problemas de adición simple
+- resta: Problemas de sustracción básica
+- comparacion: Mayor/menor, más/menos
+- conteo: Contar objetos, secuencias
+- figuras: Identificar formas geométricas básicas
+- patrones: Completar secuencias simples
+
+PERSONALIZACIÓN POR ESTILO:
+- Visual: Mencionar colores, formas, descripciones visuales
+- Auditivo: Usar palabras relacionadas con sonidos, música, conversaciones
+- Kinestesico: Incluir movimiento, acciones, actividades físicas
+- Lectura_escritura: Enfocarse en leer y comprender el problema
+
+PERSONALIZACIÓN POR CONTEXTO:
+- mercado: Compras, frutas, verduras, precios
+- escuela: Salón, útiles, compañeros, recreo
+- hogar: Familia, comidas, juguetes, mascotas
+- naturaleza: Animales, plantas, clima
+- deportes: Juegos, equipos, puntos
+
+INSTRUCCIONES ESPECÍFICAS:
+1. Cada ejercicio debe tener exactamente 4 opciones (A, B, C, D)
+2. Las opciones deben ser plausibles (no respuestas obviamente incorrectas)
+3. Incluir distractor común (error típico que cometen los estudiantes)
+4. La explicación debe ser clara y paso a paso
+5. Usar nombres peruanos comunes
+6. Adaptar dificultad al nivel_matematicas del perfil
+
+FORMATO JSON DE SALIDA:
+Genera un JSON válido con esta estructura exacta:
+
+```json
+{
+  "ejercicios": [
+    {
+      "id": "MAT_BAS_001",
+      "titulo": "Título corto del ejercicio",
+      "enunciado": "Descripción del problema en 2-3 oraciones cortas usando el contexto preferido",
+      "opciones": [
+        "A) Opción 1",
+        "B) Opción 2",
+        "C) Opción 3",
+        "D) Opción 4"
+      ],
+      "respuesta_correcta": "A",
+      "explicacion": "Explicación paso a paso de la solución usando lenguaje simple",
+      "nivel": "facil",
+      "tipo": "suma",
+      "operacion_principal": "suma",
+      "contexto": "mercado",
+      "incluye_visual": true
+    }
+  ]
+}
+```
+
+EJEMPLO DE EJERCICIO BÁSICO (SUMA - CONTEXTO MERCADO):
+```json
+{
+  "id": "MAT_BAS_001",
+  "titulo": "Compra de frutas",
+  "enunciado": "María fue al mercado. Compró 5 manzanas rojas y 3 plátanos amarillos. ¿Cuántas frutas compró en total?",
+  "opciones": [
+    "A) 8 frutas",
+    "B) 2 frutas",
+    "C) 7 frutas",
+    "D) 9 frutas"
+  ],
+  "respuesta_correcta": "A",
+  "explicacion": "Sumamos las manzanas y los plátanos: 5 manzanas + 3 plátanos = 8 frutas en total. María compró 8 frutas.",
+  "nivel": "facil",
+  "tipo": "suma",
+  "operacion_principal": "suma",
+  "contexto": "mercado",
+  "incluye_visual": true
+}
+```
+
+EJEMPLO DE EJERCICIO BÁSICO (COMPARACIÓN - CONTEXTO ESCUELA):
+```json
+{
+  "id": "MAT_BAS_002",
+  "titulo": "Lápices de colores",
+  "enunciado": "Juan tiene 12 lápices de colores. Su amiga Lucía tiene 8 lápices de colores. ¿Quién tiene más lápices?",
+  "opciones": [
+    "A) Juan tiene más",
+    "B) Lucía tiene más",
+    "C) Los dos tienen igual",
+    "D) No se puede saber"
+  ],
+  "respuesta_correcta": "A",
+  "explicacion": "Comparamos los números: 12 es mayor que 8. Por eso Juan tiene más lápices de colores que Lucía.",
+  "nivel": "facil",
+  "tipo": "comparacion",
+  "operacion_principal": "comparacion",
+  "contexto": "escuela",
+  "incluye_visual": false
+}
+```
+
+IMPORTANTE:
+- Genera SOLO el JSON, sin texto adicional antes o después
+- Usa comillas dobles para strings
+- Respeta exactamente los nombres de los campos
+- El ID debe seguir el formato: MAT_BAS_XXX (donde XXX es número secuencial)
+- Nivel debe ser "facil" para básico
+- Tipo debe coincidir con uno de los tipos válidos
+- respuesta_correcta debe ser solo la letra (A, B, C, o D)
+
+Ahora genera {cantidad} ejercicios de tipo "{tipo_ejercicio}" siguiendo todas estas especificaciones:

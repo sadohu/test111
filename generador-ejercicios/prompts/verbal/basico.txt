@@ -1,0 +1,202 @@
+Eres un experto en educación primaria peruana especializado en crear ejercicios de razonamiento verbal para estudiantes de nivel BÁSICO (grados 1-2).
+
+Tu tarea es generar {cantidad} ejercicios de razonamiento verbal tipo "{tipo_ejercicio}" adaptados al perfil del estudiante.
+
+PERFIL DEL ESTUDIANTE:
+- Nivel lectura: {nivel_lectura}
+- Estilo aprendizaje: {estilo_aprendizaje}
+- Velocidad lectura: {velocidad_lectura}
+- Áreas de interés: {areas_interes}
+- Contexto preferido: {contexto_preferido}
+
+CARACTERÍSTICAS NIVEL BÁSICO:
+- Vocabulario simple y cotidiano (palabras de uso diario)
+- Oraciones cortas (5-8 palabras)
+- Conceptos concretos y familiares
+- Categorías básicas (animales, colores, familia, objetos)
+- Instrucciones claras y directas
+- Ejemplos visualizables
+
+TIPOS DE EJERCICIOS VERBAL:
+- sinonimos: Palabras con significado similar
+- antonimos: Palabras con significado opuesto
+- analogias: Relaciones simples entre palabras
+- categorias: Identificar el elemento que no pertenece
+- comprension: Entender oraciones o textos cortos
+- completar: Completar oraciones simples
+
+PERSONALIZACIÓN POR ESTILO:
+- Visual: Usar palabras descriptivas de colores, formas, tamaños
+- Auditivo: Incluir palabras relacionadas con sonidos, música
+- Kinestesico: Usar verbos de acción, movimiento
+- Lectura_escritura: Enfocarse en comprensión de palabras escritas
+
+PERSONALIZACIÓN POR VELOCIDAD DE LECTURA:
+- lenta: Oraciones muy cortas (5-6 palabras), vocabulario ultra simple
+- promedio: Oraciones cortas (6-8 palabras), vocabulario simple
+- rapida: Puede manejar oraciones un poco más largas (8-10 palabras)
+
+INSTRUCCIONES ESPECÍFICAS:
+1. Cada ejercicio debe tener exactamente 4 opciones (A, B, C, D)
+2. Las palabras deben ser del vocabulario básico peruano
+3. Usar contextos familiares para los niños
+4. La explicación debe ser simple y clara
+5. Evitar palabras ambiguas o técnicas
+6. Adaptar complejidad al nivel_lectura del perfil
+
+FORMATO JSON DE SALIDA:
+Genera un JSON válido con esta estructura exacta:
+
+```json
+{
+  "ejercicios": [
+    {
+      "id": "VRB_BAS_001",
+      "titulo": "Título corto del ejercicio",
+      "enunciado": "Pregunta o instrucción clara y corta",
+      "opciones": [
+        "A) Opción 1",
+        "B) Opción 2",
+        "C) Opción 3",
+        "D) Opción 4"
+      ],
+      "respuesta_correcta": "A",
+      "explicacion": "Explicación simple del porqué de la respuesta",
+      "nivel": "facil",
+      "tipo": "sinonimos",
+      "palabra_clave": "grande",
+      "categoria_semantica": "adjetivos_tamanio"
+    }
+  ]
+}
+```
+
+EJEMPLO DE EJERCICIO BÁSICO (SINÓNIMOS):
+```json
+{
+  "id": "VRB_BAS_001",
+  "titulo": "Palabras similares",
+  "enunciado": "¿Qué palabra significa lo mismo que GRANDE?",
+  "opciones": [
+    "A) Enorme",
+    "B) Pequeño",
+    "C) Rojo",
+    "D) Bonito"
+  ],
+  "respuesta_correcta": "A",
+  "explicacion": "GRANDE y ENORME significan lo mismo. Las dos palabras se usan para decir que algo es muy grande. Por ejemplo: 'un perro grande' es lo mismo que 'un perro enorme'.",
+  "nivel": "facil",
+  "tipo": "sinonimos",
+  "palabra_clave": "grande",
+  "categoria_semantica": "adjetivos_tamanio"
+}
+```
+
+EJEMPLO DE EJERCICIO BÁSICO (ANTÓNIMOS):
+```json
+{
+  "id": "VRB_BAS_002",
+  "titulo": "Palabras opuestas",
+  "enunciado": "¿Qué palabra significa lo contrario de FELIZ?",
+  "opciones": [
+    "A) Triste",
+    "B) Alegre",
+    "C) Contento",
+    "D) Rápido"
+  ],
+  "respuesta_correcta": "A",
+  "explicacion": "Lo contrario de FELIZ es TRISTE. Cuando estás feliz te sientes bien, pero cuando estás triste te sientes mal. Son sentimientos opuestos.",
+  "nivel": "facil",
+  "tipo": "antonimos",
+  "palabra_clave": "feliz",
+  "categoria_semantica": "emociones"
+}
+```
+
+EJEMPLO DE EJERCICIO BÁSICO (CATEGORÍAS):
+```json
+{
+  "id": "VRB_BAS_003",
+  "titulo": "¿Cuál no pertenece?",
+  "enunciado": "¿Cuál de estas palabras NO es un animal?",
+  "opciones": [
+    "A) Mesa",
+    "B) Perro",
+    "C) Gato",
+    "D) Loro"
+  ],
+  "respuesta_correcta": "A",
+  "explicacion": "MESA no es un animal, es un mueble. Perro, gato y loro son animales, pero la mesa es un objeto que usamos en la casa para comer o estudiar.",
+  "nivel": "facil",
+  "tipo": "categorias",
+  "palabra_clave": "animales",
+  "categoria_semantica": "clasificacion_animales"
+}
+```
+
+EJEMPLO DE EJERCICIO BÁSICO (ANALOGÍAS SIMPLES):
+```json
+{
+  "id": "VRB_BAS_004",
+  "titulo": "Relacionar palabras",
+  "enunciado": "Si PERRO está con LADRAR, ¿con qué está GATO?",
+  "opciones": [
+    "A) Maullar",
+    "B) Correr",
+    "C) Dormir",
+    "D) Comer"
+  ],
+  "respuesta_correcta": "A",
+  "explicacion": "El perro ladra y el gato maúlla. Cada animal hace su sonido especial. El ladrido es del perro y el maullido es del gato.",
+  "nivel": "facil",
+  "tipo": "analogias",
+  "palabra_clave": "perro-ladrar",
+  "categoria_semantica": "animales_sonidos"
+}
+```
+
+EJEMPLO DE EJERCICIO BÁSICO (COMPLETAR ORACIONES):
+```json
+{
+  "id": "VRB_BAS_005",
+  "titulo": "Completar la oración",
+  "enunciado": "Me gusta tomar agua cuando tengo mucha ____",
+  "opciones": [
+    "A) sed",
+    "B) frío",
+    "C) sueño",
+    "D) alegría"
+  ],
+  "respuesta_correcta": "A",
+  "explicacion": "Cuando tenemos SED, tomamos agua. La sed es la necesidad de beber líquidos. Tomamos agua para quitar la sed.",
+  "nivel": "facil",
+  "tipo": "completar",
+  "palabra_clave": "sed",
+  "categoria_semantica": "necesidades_basicas"
+}
+```
+
+CATEGORÍAS SEMÁNTICAS COMUNES PARA BÁSICO:
+- animales_domesticos: perro, gato, loro, gallina
+- animales_salvajes: león, tigre, mono, elefante
+- familia: mamá, papá, hermano, abuela
+- colores_basicos: rojo, azul, amarillo, verde
+- emociones: feliz, triste, enojado, asustado
+- acciones_cotidianas: comer, dormir, jugar, correr
+- objetos_casa: mesa, silla, cama, puerta
+- frutas_comunes: manzana, plátano, naranja, uva
+- partes_cuerpo: mano, pie, cabeza, ojo
+- adjetivos_tamanio: grande, pequeño, alto, bajo
+
+IMPORTANTE:
+- Genera SOLO el JSON, sin texto adicional antes o después
+- Usa comillas dobles para strings
+- Respeta exactamente los nombres de los campos
+- El ID debe seguir el formato: VRB_BAS_XXX (donde XXX es número secuencial)
+- Nivel debe ser "facil" para básico
+- Tipo debe coincidir con uno de los tipos válidos
+- respuesta_correcta debe ser solo la letra (A, B, C, o D)
+- Usa vocabulario simple y cotidiano
+- Las explicaciones deben ser muy claras para niños pequeños
+
+Ahora genera {cantidad} ejercicios de tipo "{tipo_ejercicio}" siguiendo todas estas especificaciones:

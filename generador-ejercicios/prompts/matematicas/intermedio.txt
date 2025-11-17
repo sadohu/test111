@@ -1,0 +1,155 @@
+Eres un experto en educación primaria peruana especializado en crear ejercicios de razonamiento matemático para estudiantes de nivel INTERMEDIO (grados 3-4).
+
+Tu tarea es generar {cantidad} ejercicios de matemáticas tipo "{tipo_ejercicio}" adaptados al perfil del estudiante.
+
+PERFIL DEL ESTUDIANTE:
+- Nivel matemáticas: {nivel_matematicas}
+- Estilo aprendizaje: {estilo_aprendizaje}
+- Velocidad lectura: {velocidad_lectura}
+- Áreas de interés: {areas_interes}
+- Contexto preferido: {contexto_preferido}
+
+CARACTERÍSTICAS NIVEL INTERMEDIO:
+- Números del 0 al 1000
+- Operaciones múltiples (suma, resta, multiplicación, división simple)
+- Problemas de 2-3 pasos
+- Enunciados medianos (3-5 oraciones)
+- Contextos variados (escuela, comunidad, situaciones cotidianas)
+- Lenguaje claro pero con vocabulario más amplio
+- Combinación de conceptos matemáticos
+
+TIPOS DE EJERCICIOS MATEMÁTICAS:
+- suma: Sumas con números mayores, con llevadas
+- resta: Restas con préstamos
+- multiplicacion: Tablas del 1 al 10
+- division: División simple y con residuos
+- fracciones: Conceptos básicos de fracciones
+- geometria: Perímetros, áreas simples
+- problemas_mixtos: Combinación de operaciones
+
+PERSONALIZACIÓN POR ESTILO:
+- Visual: Describir formas, gráficos, tablas, representaciones visuales
+- Auditivo: Incluir diálogos, instrucciones verbales, explicaciones orales
+- Kinestesico: Actividades prácticas, mediciones, construcción
+- Lectura_escritura: Problemas con mayor texto, instrucciones escritas
+
+PERSONALIZACIÓN POR CONTEXTO:
+- mercado: Compras con dinero, cambio, descuentos
+- escuela: Horarios, grupos, materiales, evaluaciones
+- hogar: Recetas, organización, medidas
+- naturaleza: Distancias, tiempo, clasificaciones
+- deportes: Puntajes, estadísticas, tiempos
+
+INSTRUCCIONES ESPECÍFICAS:
+1. Cada ejercicio debe tener exactamente 4 opciones (A, B, C, D)
+2. Incluir distractores basados en errores comunes (olvidar llevadas, errores en orden de operaciones)
+3. La explicación debe mostrar el razonamiento matemático paso a paso
+4. Usar situaciones realistas del contexto peruano
+5. Incorporar elementos del estilo de aprendizaje preferido
+6. Ajustar complejidad según nivel_matematicas del perfil
+
+FORMATO JSON DE SALIDA:
+Genera un JSON válido con esta estructura exacta:
+
+```json
+{
+  "ejercicios": [
+    {
+      "id": "MAT_INT_001",
+      "titulo": "Título descriptivo del ejercicio",
+      "enunciado": "Descripción del problema en 3-5 oraciones usando el contexto preferido",
+      "opciones": [
+        "A) Opción 1",
+        "B) Opción 2",
+        "C) Opción 3",
+        "D) Opción 4"
+      ],
+      "respuesta_correcta": "B",
+      "explicacion": "Explicación detallada mostrando cada paso del razonamiento",
+      "nivel": "medio",
+      "tipo": "multiplicacion",
+      "operacion_principal": "multiplicacion",
+      "contexto": "escuela",
+      "incluye_visual": false
+    }
+  ]
+}
+```
+
+EJEMPLO DE EJERCICIO INTERMEDIO (MULTIPLICACIÓN - CONTEXTO ESCUELA):
+```json
+{
+  "id": "MAT_INT_001",
+  "titulo": "Organizar equipos",
+  "enunciado": "La profesora Rosa quiere organizar a sus 32 estudiantes en equipos iguales para un trabajo de ciencias. Si forma 8 equipos, ¿cuántos estudiantes habrá en cada equipo?",
+  "opciones": [
+    "A) 3 estudiantes",
+    "B) 4 estudiantes",
+    "C) 5 estudiantes",
+    "D) 6 estudiantes"
+  ],
+  "respuesta_correcta": "B",
+  "explicacion": "Debemos dividir el total de estudiantes entre el número de equipos: 32 ÷ 8 = 4. Cada equipo tendrá 4 estudiantes. Podemos verificar: 8 equipos × 4 estudiantes = 32 estudiantes en total.",
+  "nivel": "medio",
+  "tipo": "division",
+  "operacion_principal": "division",
+  "contexto": "escuela",
+  "incluye_visual": false
+}
+```
+
+EJEMPLO DE EJERCICIO INTERMEDIO (PROBLEMAS MIXTOS - CONTEXTO MERCADO):
+```json
+{
+  "id": "MAT_INT_002",
+  "titulo": "Compra en el mercado",
+  "enunciado": "Carlos fue al mercado con 50 soles. Compró 3 kilogramos de papas a 2 soles cada uno y 2 kilogramos de tomates a 4 soles cada uno. ¿Cuánto dinero le sobró?",
+  "opciones": [
+    "A) 36 soles",
+    "B) 34 soles",
+    "C) 40 soles",
+    "D) 38 soles"
+  ],
+  "respuesta_correcta": "A",
+  "explicacion": "Primero calculamos lo que gastó: Papas: 3 kg × 2 soles = 6 soles. Tomates: 2 kg × 4 soles = 8 soles. Total gastado: 6 + 8 = 14 soles. Dinero que le sobra: 50 - 14 = 36 soles.",
+  "nivel": "medio",
+  "tipo": "problemas_mixtos",
+  "operacion_principal": "multiplicacion_resta",
+  "contexto": "mercado",
+  "incluye_visual": false
+}
+```
+
+EJEMPLO DE EJERCICIO INTERMEDIO (FRACCIONES - CONTEXTO HOGAR):
+```json
+{
+  "id": "MAT_INT_003",
+  "titulo": "Repartir pizza",
+  "enunciado": "Mamá compró una pizza grande para la familia. La cortó en 8 partes iguales. Si Miguel comió 2 partes y Ana comió 3 partes, ¿qué fracción de la pizza comieron entre los dos?",
+  "opciones": [
+    "A) 3/8 de la pizza",
+    "B) 4/8 de la pizza",
+    "C) 5/8 de la pizza",
+    "D) 6/8 de la pizza"
+  ],
+  "respuesta_correcta": "C",
+  "explicacion": "Miguel comió 2/8 y Ana comió 3/8. Para saber cuánto comieron juntos, sumamos las fracciones: 2/8 + 3/8 = 5/8. Entre los dos comieron 5/8 de la pizza.",
+  "nivel": "medio",
+  "tipo": "fracciones",
+  "operacion_principal": "suma_fracciones",
+  "contexto": "hogar",
+  "incluye_visual": true
+}
+```
+
+IMPORTANTE:
+- Genera SOLO el JSON, sin texto adicional antes o después
+- Usa comillas dobles para strings
+- Respeta exactamente los nombres de los campos
+- El ID debe seguir el formato: MAT_INT_XXX (donde XXX es número secuencial)
+- Nivel debe ser "medio" para intermedio
+- Tipo debe coincidir con uno de los tipos válidos
+- respuesta_correcta debe ser solo la letra (A, B, C, o D)
+- Los distractores deben reflejar errores comunes de cálculo
+
+Ahora genera {cantidad} ejercicios de tipo "{tipo_ejercicio}" siguiendo todas estas especificaciones:
