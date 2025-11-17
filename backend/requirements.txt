@@ -1,0 +1,26 @@
+# ============================================================================
+# BACKEND API - SISTEMA DE CLASIFICACIÓN DE PERFILES
+# Requirements.txt
+# ============================================================================
+
+# FastAPI Framework
+fastapi>=0.104.0
+uvicorn[standard]>=0.24.0
+
+# Pydantic para validación de datos
+pydantic>=2.5.0
+pydantic-settings>=2.1.0
+
+# Supabase Cliente
+supabase>=2.0.0
+
+# Python dotenv para variables de entorno
+python-dotenv>=1.0.0
+
+# Utilidades
+python-multipart>=0.0.6
+
+# Testing (opcional)
+pytest>=7.4.0
+pytest-asyncio>=0.21.0
+httpx>=0.25.0
