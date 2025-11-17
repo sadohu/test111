@@ -241,12 +241,24 @@ class CompletarSesionRequest(BaseModel):
     fecha_fin: Optional[str] = Field(default_factory=lambda: datetime.now().isoformat())
 
 
+class RecomendacionNivel(BaseModel):
+    """Recomendación de nivel basada en rendimiento"""
+    nivel_actual: str
+    nivel_recomendado: str
+    direccion: str = Field(..., description="subir|mantener|bajar")
+    razon: str
+    confianza: str = Field(..., description="alta|media|baja")
+    cambio_aplicado: bool
+    metricas: Dict = Field(default_factory=dict)
+
+
 class CompletarSesionResponse(BaseModel):
     """Response al completar sesión"""
     success: bool
     mensaje: str
     sesion_id: str
     estadisticas: EstadisticasSesion
+    recomendacion_nivel: Optional[RecomendacionNivel] = None
 
 
 class ObtenerSesionResponse(BaseModel):

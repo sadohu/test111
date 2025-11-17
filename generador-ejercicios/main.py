@@ -27,13 +27,16 @@ from models import (
     ObtenerSesionResponse,
     ListarSesionesResponse,
     ObtenerEstadisticasEstudianteResponse,
+    # Adaptación de nivel
+    RecomendacionNivel,
 )
 from services import (
     generador_matematicas,
     generador_verbal,
     perfil_adapter,
     gemini_client,
-    respuestas_storage
+    respuestas_storage,
+    adaptador_nivel
 )
 
 # Cargar variables de entorno
@@ -450,11 +453,33 @@ async def completar_sesion(sesion_id: str, request: CompletarSesionRequest):
         # Calcular estadísticas
         estadisticas = respuestas_storage.calcular_estadisticas_sesion(sesion_id)
 
+        # Calcular recomendación de nivel
+        recomendacion = None
+        try:
+            # Obtener estadísticas del estudiante
+            stats_estudiante = respuestas_storage.calcular_estadisticas_estudiante(
+                sesion_completada.estudiante_id
+            )
+
+            # Recomendar nivel
+            recomendacion_dict = adaptador_nivel.recomendar_nivel(
+                nivel_actual=sesion_completada.nivel_determinado,
+                estadisticas_sesion=estadisticas,
+                estadisticas_estudiante=stats_estudiante,
+                sesion=sesion_completada
+            )
+
+            recomendacion = RecomendacionNivel(**recomendacion_dict)
+        except Exception as e:
+            print(f"⚠️ Error calculando recomendación de nivel: {e}")
+            # Continuar sin recomendación
+
         return CompletarSesionResponse(
             success=True,
             mensaje="Sesión completada exitosamente",
             sesion_id=sesion_id,
-            estadisticas=estadisticas
+            estadisticas=estadisticas,
+            recomendacion_nivel=recomendacion
         )
 
     except HTTPException:
@@ -558,6 +583,76 @@ async def obtener_estadisticas_estudiante(estudiante_id: str):
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.get(
+    "/api/estudiantes/{estudiante_id}/nivel-recomendado",
+    response_model=RecomendacionNivel,
+    responses={
+        404: {"model": ErrorResponse},
+        500: {"model": ErrorResponse}
+    },
+    tags=["Estudiantes"]
+)
+async def obtener_nivel_recomendado(estudiante_id: str, curso: CursoEnum):
+    """
+    Obtiene la recomendación de nivel para un estudiante
+
+    Basándose en su historial de rendimiento, recomienda el próximo
+    nivel de dificultad (básico, intermedio o avanzado).
+
+    Parámetros:
+    - estudiante_id: ID del estudiante
+    - curso: Curso para el que se quiere la recomendación (matematicas|verbal)
+    """
+    try:
+        # Obtener estadísticas del estudiante
+        stats_estudiante = respuestas_storage.calcular_estadisticas_estudiante(estudiante_id)
+
+        if stats_estudiante.total_sesiones == 0:
+            # Sin historial, retornar nivel básico como recomendación
+            return RecomendacionNivel(
+                nivel_actual="basico",
+                nivel_recomendado="basico",
+                direccion="mantener",
+                razon="Sin historial previo. Se recomienda comenzar en nivel básico.",
+                confianza="baja",
+                cambio_aplicado=False,
+                metricas={"total_sesiones": 0}
+            )
+
+        # Obtener última sesión del curso especificado
+        sesiones = respuestas_storage.listar_sesiones_estudiante(estudiante_id)
+        sesiones_curso = [s for s in sesiones if s.curso == curso]
+
+        if not sesiones_curso:
+            # Sin historial en este curso, usar nivel intermedio como default
+            return RecomendacionNivel(
+                nivel_actual="intermedio",
+                nivel_recomendado="intermedio",
+                direccion="mantener",
+                razon=f"Sin historial en {curso.value}. Se recomienda nivel intermedio.",
+                confianza="baja",
+                cambio_aplicado=False,
+                metricas={"sesiones_curso": 0}
+            )
+
+        # Obtener última sesión y sus estadísticas
+        ultima_sesion = sesiones_curso[0]  # Ya están ordenadas por fecha
+        stats_sesion = respuestas_storage.calcular_estadisticas_sesion(ultima_sesion.sesion_id)
+
+        # Recomendar nivel
+        recomendacion_dict = adaptador_nivel.recomendar_nivel(
+            nivel_actual=ultima_sesion.nivel_determinado,
+            estadisticas_sesion=stats_sesion,
+            estadisticas_estudiante=stats_estudiante,
+            sesion=ultima_sesion
+        )
+
+        return RecomendacionNivel(**recomendacion_dict)
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error al calcular nivel recomendado: {str(e)}")
 
 
 # ============================================================================

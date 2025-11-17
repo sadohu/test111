@@ -230,11 +230,22 @@ export interface RegistrarRespuestaResponse {
   };
 }
 
+export interface RecomendacionNivel {
+  nivel_actual: string;
+  nivel_recomendado: string;
+  direccion: "subir" | "mantener" | "bajar";
+  razon: string;
+  confianza: "alta" | "media" | "baja";
+  cambio_aplicado: boolean;
+  metricas: Record<string, any>;
+}
+
 export interface CompletarSesionResponse {
   success: boolean;
   mensaje: string;
   sesion_id: string;
   estadisticas: EstadisticasSesion;
+  recomendacion_nivel?: RecomendacionNivel;
 }
 
 export interface ObtenerEstadisticasEstudianteResponse {

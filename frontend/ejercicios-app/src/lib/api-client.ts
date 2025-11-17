@@ -19,6 +19,8 @@ import {
   RegistrarRespuestaResponse,
   CompletarSesionResponse,
   ObtenerEstadisticasEstudianteResponse,
+  // Adaptación
+  RecomendacionNivel,
 } from "@/types/ejercicios";
 
 // ============================================================================
@@ -243,6 +245,20 @@ class EjerciciosAPIClient {
     const response = await this.client.get(
       `/api/estudiantes/${estudianteId}/sesiones`,
       { params: { limite } }
+    );
+    return response.data;
+  }
+
+  /**
+   * Obtener nivel recomendado para un estudiante
+   */
+  async obtenerNivelRecomendado(
+    estudianteId: string,
+    curso: string
+  ): Promise<RecomendacionNivel> {
+    const response = await this.client.get<RecomendacionNivel>(
+      `/api/estudiantes/${estudianteId}/nivel-recomendado`,
+      { params: { curso } }
     );
     return response.data;
   }

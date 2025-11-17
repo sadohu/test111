@@ -45,6 +45,7 @@ from .respuesta import (
     SesionEjercicios,
     EstadisticasSesion,
     EstadisticasEstudiante,
+    RecomendacionNivel,
 
     # Request/Response
     CrearSesionRequest,
@@ -93,6 +94,7 @@ __all__ = [
     'SesionEjercicios',
     'EstadisticasSesion',
     'EstadisticasEstudiante',
+    'RecomendacionNivel',
     'CrearSesionRequest',
     'CrearSesionResponse',
     'RegistrarRespuestaRequest',
