@@ -16,13 +16,24 @@ from models import (
     ValidarRespuestaResponse,
     ErrorResponse,
     HealthCheckResponse,
-    CursoEnum
+    CursoEnum,
+    # Tracking de respuestas
+    CrearSesionRequest,
+    CrearSesionResponse,
+    RegistrarRespuestaRequest,
+    RegistrarRespuestaResponse,
+    CompletarSesionRequest,
+    CompletarSesionResponse,
+    ObtenerSesionResponse,
+    ListarSesionesResponse,
+    ObtenerEstadisticasEstudianteResponse,
 )
 from services import (
     generador_matematicas,
     generador_verbal,
     perfil_adapter,
-    gemini_client
+    gemini_client,
+    respuestas_storage
 )
 
 # Cargar variables de entorno
@@ -306,6 +317,252 @@ async def validar_respuesta(request: ValidarRespuestaEjercicioRequest):
         retroalimentacion="¡Muy bien! Continúa así."
     )
 
+
+# ============================================================================
+# ENDPOINTS DE TRACKING DE RESPUESTAS
+# ============================================================================
+
+@app.post(
+    "/api/sesiones/crear",
+    response_model=CrearSesionResponse,
+    responses={
+        400: {"model": ErrorResponse},
+        500: {"model": ErrorResponse}
+    },
+    tags=["Sesiones"]
+)
+async def crear_sesion(request: CrearSesionRequest):
+    """
+    Crea una nueva sesión de ejercicios para un estudiante
+
+    Este endpoint debe llamarse después de generar ejercicios.
+    Almacena la sesión y permite tracking de respuestas.
+    """
+    try:
+        # Generar ID de sesión
+        sesion_id = respuestas_storage.generar_id_sesion(request.estudiante_id)
+
+        # Crear objeto de sesión
+        from models import SesionEjercicios
+        sesion = SesionEjercicios(
+            sesion_id=sesion_id,
+            estudiante_id=request.estudiante_id,
+            curso=request.curso,
+            nivel_determinado=request.nivel_determinado,
+            cantidad_ejercicios=len(request.ejercicios_ids),
+            ejercicios_ids=request.ejercicios_ids,
+            perfil_usado=request.perfil_usado
+        )
+
+        # Guardar sesión
+        sesion_guardada = respuestas_storage.crear_sesion(sesion)
+
+        return CrearSesionResponse(
+            success=True,
+            mensaje="Sesión creada exitosamente",
+            sesion_id=sesion_id,
+            sesion=sesion_guardada
+        )
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error al crear sesión: {str(e)}")
+
+
+@app.post(
+    "/api/sesiones/{sesion_id}/responder",
+    response_model=RegistrarRespuestaResponse,
+    responses={
+        404: {"model": ErrorResponse},
+        500: {"model": ErrorResponse}
+    },
+    tags=["Sesiones"]
+)
+async def registrar_respuesta(sesion_id: str, request: RegistrarRespuestaRequest):
+    """
+    Registra la respuesta de un estudiante a un ejercicio
+
+    Actualiza el progreso de la sesión y registra si la respuesta es correcta.
+    """
+    try:
+        # Crear respuesta
+        from models import RespuestaEstudiante
+        respuesta = RespuestaEstudiante(
+            ejercicio_id=request.ejercicio_id,
+            opcion_seleccionada=request.opcion_seleccionada,
+            es_correcta=request.es_correcta,
+            tiempo_respuesta_segundos=request.tiempo_respuesta_segundos
+        )
+
+        # Registrar
+        sesion_actualizada = respuestas_storage.registrar_respuesta(sesion_id, respuesta)
+
+        if not sesion_actualizada:
+            raise HTTPException(
+                status_code=404,
+                detail=f"Sesión {sesion_id} no encontrada"
+            )
+
+        # Calcular progreso
+        progreso = {
+            "completados": len(sesion_actualizada.respuestas),
+            "total": sesion_actualizada.cantidad_ejercicios,
+            "correctos": sum(1 for r in sesion_actualizada.respuestas if r.es_correcta)
+        }
+
+        return RegistrarRespuestaResponse(
+            success=True,
+            mensaje="Respuesta registrada exitosamente",
+            respuesta=respuesta,
+            progreso=progreso
+        )
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error al registrar respuesta: {str(e)}")
+
+
+@app.post(
+    "/api/sesiones/{sesion_id}/completar",
+    response_model=CompletarSesionResponse,
+    responses={
+        404: {"model": ErrorResponse},
+        500: {"model": ErrorResponse}
+    },
+    tags=["Sesiones"]
+)
+async def completar_sesion(sesion_id: str, request: CompletarSesionRequest):
+    """
+    Marca una sesión como completada y calcula estadísticas finales
+
+    Se debe llamar cuando el estudiante termine todos los ejercicios.
+    """
+    try:
+        # Completar sesión
+        sesion_completada = respuestas_storage.completar_sesion(sesion_id, request.fecha_fin)
+
+        if not sesion_completada:
+            raise HTTPException(
+                status_code=404,
+                detail=f"Sesión {sesion_id} no encontrada"
+            )
+
+        # Calcular estadísticas
+        estadisticas = respuestas_storage.calcular_estadisticas_sesion(sesion_id)
+
+        return CompletarSesionResponse(
+            success=True,
+            mensaje="Sesión completada exitosamente",
+            sesion_id=sesion_id,
+            estadisticas=estadisticas
+        )
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error al completar sesión: {str(e)}")
+
+
+@app.get(
+    "/api/sesiones/{sesion_id}",
+    response_model=ObtenerSesionResponse,
+    responses={
+        404: {"model": ErrorResponse},
+        500: {"model": ErrorResponse}
+    },
+    tags=["Sesiones"]
+)
+async def obtener_sesion(sesion_id: str):
+    """
+    Obtiene los detalles completos de una sesión
+
+    Incluye todos los ejercicios, respuestas y estadísticas.
+    """
+    try:
+        sesion = respuestas_storage.obtener_sesion(sesion_id)
+
+        if not sesion:
+            raise HTTPException(
+                status_code=404,
+                detail=f"Sesión {sesion_id} no encontrada"
+            )
+
+        # Calcular estadísticas
+        estadisticas = respuestas_storage.calcular_estadisticas_sesion(sesion_id)
+
+        return ObtenerSesionResponse(
+            success=True,
+            sesion=sesion,
+            estadisticas=estadisticas
+        )
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.get(
+    "/api/estudiantes/{estudiante_id}/sesiones",
+    response_model=ListarSesionesResponse,
+    responses={
+        500: {"model": ErrorResponse}
+    },
+    tags=["Estudiantes"]
+)
+async def listar_sesiones_estudiante(estudiante_id: str, limite: int = 10):
+    """
+    Lista todas las sesiones de un estudiante
+
+    Ordenadas por fecha (más reciente primero).
+    Parámetro limite: número máximo de sesiones a retornar (default: 10).
+    """
+    try:
+        sesiones = respuestas_storage.listar_sesiones_estudiante(estudiante_id, limite)
+
+        return ListarSesionesResponse(
+            success=True,
+            estudiante_id=estudiante_id,
+            total_sesiones=len(sesiones),
+            sesiones=sesiones
+        )
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.get(
+    "/api/estudiantes/{estudiante_id}/estadisticas",
+    response_model=ObtenerEstadisticasEstudianteResponse,
+    responses={
+        500: {"model": ErrorResponse}
+    },
+    tags=["Estudiantes"]
+)
+async def obtener_estadisticas_estudiante(estudiante_id: str):
+    """
+    Obtiene estadísticas agregadas de un estudiante
+
+    Incluye totales, promedios y desempeño por curso.
+    """
+    try:
+        estadisticas = respuestas_storage.calcular_estadisticas_estudiante(estudiante_id)
+        sesiones_recientes = respuestas_storage.listar_sesiones_estudiante(estudiante_id, 5)
+
+        return ObtenerEstadisticasEstudianteResponse(
+            success=True,
+            estudiante_id=estudiante_id,
+            estadisticas=estadisticas,
+            sesiones_recientes=sesiones_recientes
+        )
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+# ============================================================================
+# ENDPOINTS DE PERFILES
+# ============================================================================
 
 @app.get(
     "/api/perfiles/{estudiante_id}",

@@ -7,6 +7,7 @@ from .perfil_adapter import perfil_adapter, PerfilAdapter
 from .prompt_builder import prompt_builder, PromptBuilder, construir_prompt
 from .generador_matematicas import generador_matematicas, GeneradorMatematicas
 from .generador_verbal import generador_verbal, GeneradorVerbal
+from .respuestas_storage import respuestas_storage, RespuestasStorage
 
 __all__ = [
     # Singletons
@@ -15,6 +16,7 @@ __all__ = [
     'prompt_builder',
     'generador_matematicas',
     'generador_verbal',
+    'respuestas_storage',
 
     # Clases
     'GeminiClient',
@@ -22,6 +24,7 @@ __all__ = [
     'PromptBuilder',
     'GeneradorMatematicas',
     'GeneradorVerbal',
+    'RespuestasStorage',
 
     # Funciones
     'construir_prompt',

@@ -36,12 +36,35 @@ from .request import (
     ConfiguracionGenerador,
 )
 
+from .respuesta import (
+    # Enums
+    EstadoSesion,
+
+    # Modelos de datos
+    RespuestaEstudiante,
+    SesionEjercicios,
+    EstadisticasSesion,
+    EstadisticasEstudiante,
+
+    # Request/Response
+    CrearSesionRequest,
+    CrearSesionResponse,
+    RegistrarRespuestaRequest,
+    RegistrarRespuestaResponse,
+    CompletarSesionRequest,
+    CompletarSesionResponse,
+    ObtenerSesionResponse,
+    ListarSesionesResponse,
+    ObtenerEstadisticasEstudianteResponse,
+)
+
 __all__ = [
     # Enums
     'CursoEnum',
     'NivelDificultad',
     'TipoEjercicioMatematicas',
     'TipoEjercicioVerbal',
+    'EstadoSesion',
 
     # Ejercicios
     'EjercicioBase',
@@ -64,4 +87,19 @@ __all__ = [
     # Auxiliares
     'EstadoGeneracion',
     'ConfiguracionGenerador',
+
+    # Respuestas y Sesiones
+    'RespuestaEstudiante',
+    'SesionEjercicios',
+    'EstadisticasSesion',
+    'EstadisticasEstudiante',
+    'CrearSesionRequest',
+    'CrearSesionResponse',
+    'RegistrarRespuestaRequest',
+    'RegistrarRespuestaResponse',
+    'CompletarSesionRequest',
+    'CompletarSesionResponse',
+    'ObtenerSesionResponse',
+    'ListarSesionesResponse',
+    'ObtenerEstadisticasEstudianteResponse',
 ]

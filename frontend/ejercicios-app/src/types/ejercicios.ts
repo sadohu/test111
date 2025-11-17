@@ -165,7 +165,102 @@ export interface HealthCheckResponse {
 }
 
 // ============================================================================
-// TIPOS PARA UI
+// TRACKING DE SESIONES (Backend models)
+// ============================================================================
+
+export enum EstadoSesion {
+  INICIADA = "iniciada",
+  EN_PROGRESO = "en_progreso",
+  COMPLETADA = "completada",
+  ABANDONADA = "abandonada",
+}
+
+export interface RespuestaEstudianteBackend {
+  ejercicio_id: string;
+  opcion_seleccionada: string;
+  es_correcta: boolean;
+  tiempo_respuesta_segundos: number;
+  timestamp: string;
+}
+
+export interface SesionEjerciciosBackend {
+  sesion_id: string;
+  estudiante_id: string;
+  curso: CursoEnum;
+  nivel_determinado: string;
+  cantidad_ejercicios: number;
+  ejercicios_ids: string[];
+  respuestas: RespuestaEstudianteBackend[];
+  fecha_inicio: string;
+  fecha_fin?: string;
+  estado: EstadoSesion;
+  perfil_usado: any;
+}
+
+export interface CrearSesionRequest {
+  estudiante_id: string;
+  curso: CursoEnum;
+  ejercicios_ids: string[];
+  nivel_determinado: string;
+  perfil_usado?: any;
+}
+
+export interface CrearSesionResponse {
+  success: boolean;
+  mensaje: string;
+  sesion_id: string;
+  sesion: SesionEjerciciosBackend;
+}
+
+export interface RegistrarRespuestaRequest {
+  ejercicio_id: string;
+  opcion_seleccionada: string;
+  es_correcta: boolean;
+  tiempo_respuesta_segundos: number;
+}
+
+export interface RegistrarRespuestaResponse {
+  success: boolean;
+  mensaje: string;
+  respuesta: RespuestaEstudianteBackend;
+  progreso: {
+    completados: number;
+    total: number;
+    correctos: number;
+  };
+}
+
+export interface CompletarSesionResponse {
+  success: boolean;
+  mensaje: string;
+  sesion_id: string;
+  estadisticas: EstadisticasSesion;
+}
+
+export interface ObtenerEstadisticasEstudianteResponse {
+  success: boolean;
+  estudiante_id: string;
+  estadisticas: EstadisticasEstudianteBackend;
+  sesiones_recientes: SesionEjerciciosBackend[];
+}
+
+export interface EstadisticasEstudianteBackend {
+  estudiante_id: string;
+  total_sesiones: number;
+  total_ejercicios_completados: number;
+  total_ejercicios_correctos: number;
+  tasa_aciertos_promedio: number;
+  tiempo_promedio_por_ejercicio: number;
+  sesiones_matematicas: number;
+  sesiones_verbal: number;
+  tasa_aciertos_matematicas?: number;
+  tasa_aciertos_verbal?: number;
+  ultima_sesion_fecha?: string;
+  ultima_sesion_id?: string;
+}
+
+// ============================================================================
+// TIPOS PARA UI (mantener compatibilidad)
 // ============================================================================
 
 export interface RespuestaEstudiante {
