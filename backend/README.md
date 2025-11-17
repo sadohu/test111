@@ -22,6 +22,7 @@ API RESTful desarrollada con FastAPI para clasificar perfiles de estudiantes bas
 - ✅ **Validación de Datos**: Pydantic para validación robusta
 - ✅ **Documentación Automática**: Swagger UI y ReDoc incluidos
 - ✅ **CORS Configurado**: Listo para integración con frontend
+- ✅ **Almacenamiento en JSON**: Guarda automáticamente todos los perfiles clasificados
 - ✅ **Integración con Supabase**: Almacenamiento persistente (opcional)
 
 ## 🛠 Tecnologías
@@ -243,6 +244,115 @@ GET /api/categorias
     "El Soñador Creativo",
     "El Observador Reflexivo"
   ]
+}
+```
+
+---
+
+## 💾 Almacenamiento en JSON
+
+**IMPORTANTE**: Todos los perfiles clasificados se guardan **automáticamente** en `backend/data/perfiles.json`.
+
+### 📊 Listar Perfiles Guardados
+
+```http
+GET /api/perfiles?grado=3-4&nivel_riesgo=alto&limit=50
+```
+
+**Query Parameters (opcionales):**
+- `grado`: Filtrar por grado ("1-2", "3-4", "5-6")
+- `nivel_riesgo`: Filtrar por nivel de riesgo ("bajo", "medio", "alto")
+- `limit`: Límite de resultados (default: 50)
+
+**Respuesta:**
+```json
+{
+  "success": true,
+  "total": 15,
+  "perfiles": [
+    {
+      "estudiante_id": "EST001",
+      "grado": "3-4",
+      "categoria_principal": "El Científico Resiliente",
+      "nivel_riesgo": "bajo",
+      "respuestas_originales": { "P1": "A", "P2": "C", ... },
+      "fecha_guardado": "2025-11-17T10:30:00"
+    }
+  ]
+}
+```
+
+---
+
+### 🔍 Obtener Perfil de un Estudiante
+
+```http
+GET /api/perfil/{estudiante_id}
+```
+
+**Ejemplo:**
+```http
+GET /api/perfil/EST001
+```
+
+**Respuesta (200):**
+```json
+{
+  "success": true,
+  "perfil": {
+    "estudiante_id": "EST001",
+    "grado": "3-4",
+    "estilo_aprendizaje": "visual",
+    "categoria_principal": "El Científico Resiliente",
+    "nivel_riesgo": "bajo",
+    "recomendaciones": [...],
+    "fecha_guardado": "2025-11-17T10:30:00"
+  }
+}
+```
+
+**Respuesta (404):**
+```json
+{
+  "detail": "No se encontró perfil para estudiante: EST001"
+}
+```
+
+---
+
+### 📈 Obtener Estadísticas
+
+```http
+GET /api/estadisticas
+```
+
+**Respuesta:**
+```json
+{
+  "success": true,
+  "estadisticas": {
+    "total_perfiles": 125,
+    "por_categoria": {
+      "El Científico Resiliente": 25,
+      "El Artista Creativo": 18,
+      ...
+    },
+    "por_nivel_riesgo": {
+      "bajo": 60,
+      "medio": 50,
+      "alto": 15
+    },
+    "por_grado": {
+      "1-2": 40,
+      "3-4": 45,
+      "5-6": 40
+    },
+    "metadata": {
+      "created_at": "2025-11-17T08:00:00",
+      "last_updated": "2025-11-17T15:30:00",
+      "version": "1.0.0"
+    }
+  }
 }
 ```
 

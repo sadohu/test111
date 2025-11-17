@@ -18,6 +18,7 @@ from app.services.clasificador import (
     SistemaClasificacionPerfiles,
     PerfilEstudiante,
 )
+from app.services.json_storage import json_storage
 
 # Configurar logging
 logging.basicConfig(level=logging.INFO)
@@ -83,7 +84,17 @@ async def clasificar_perfil(request: ClasificarPerfilRequest):
             confianza_perfil=perfil.confianza_perfil,
         )
 
-        logger.info(f"Perfil clasificado exitosamente: {perfil.categoria_principal}")
+        # Guardar en JSON automáticamente
+        perfil_dict = response.model_dump()
+        perfil_dict["respuestas_originales"] = request.respuestas
+        storage_result = json_storage.guardar_perfil(perfil_dict)
+
+        if storage_result.get("success"):
+            logger.info(f"💾 Perfil guardado en JSON: {storage_result.get('file')}")
+        else:
+            logger.warning(f"⚠️  No se pudo guardar en JSON: {storage_result.get('error')}")
+
+        logger.info(f"✅ Perfil clasificado exitosamente: {perfil.categoria_principal}")
         return response
 
     except ValueError as e:
@@ -219,3 +230,104 @@ async def health_check():
         "service": "Sistema de Clasificación de Perfiles",
         "version": "1.0.0"
     }
+
+
+# ============================================================================
+# ENDPOINTS DE GESTIÓN DE PERFILES GUARDADOS
+# ============================================================================
+
+@router.get("/perfiles")
+async def listar_perfiles_guardados(
+    grado: str = None,
+    nivel_riesgo: str = None,
+    limit: int = 50
+):
+    """
+    Lista los perfiles guardados en JSON con filtros opcionales.
+
+    Args:
+        grado: Filtrar por grado (opcional)
+        nivel_riesgo: Filtrar por nivel de riesgo (opcional)
+        limit: Límite de resultados (default: 50)
+
+    Returns:
+        Lista de perfiles guardados
+    """
+    try:
+        perfiles = json_storage.listar_perfiles(
+            grado=grado,
+            nivel_riesgo=nivel_riesgo,
+            limit=limit
+        )
+
+        return {
+            "success": True,
+            "total": len(perfiles),
+            "perfiles": perfiles
+        }
+
+    except Exception as e:
+        logger.error(f"Error al listar perfiles: {str(e)}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Error al listar perfiles: {str(e)}"
+        )
+
+
+@router.get("/perfil/{estudiante_id}")
+async def obtener_perfil_guardado(estudiante_id: str):
+    """
+    Obtiene el perfil más reciente de un estudiante desde JSON.
+
+    Args:
+        estudiante_id: ID del estudiante
+
+    Returns:
+        Perfil del estudiante
+    """
+    try:
+        perfil = json_storage.obtener_perfil(estudiante_id)
+
+        if not perfil:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=f"No se encontró perfil para estudiante: {estudiante_id}"
+            )
+
+        return {
+            "success": True,
+            "perfil": perfil
+        }
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error al obtener perfil: {str(e)}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Error al obtener perfil: {str(e)}"
+        )
+
+
+@router.get("/estadisticas")
+async def obtener_estadisticas():
+    """
+    Obtiene estadísticas de los perfiles guardados.
+
+    Returns:
+        Estadísticas por categoría, nivel de riesgo y grado
+    """
+    try:
+        estadisticas = json_storage.obtener_estadisticas()
+
+        return {
+            "success": True,
+            "estadisticas": estadisticas
+        }
+
+    except Exception as e:
+        logger.error(f"Error al obtener estadísticas: {str(e)}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Error al obtener estadísticas: {str(e)}"
+        )
