@@ -72,11 +72,12 @@ cd /home/user/test111
 
 ```
 test111/
-├── backend/                        # ✅ Backend de clasificación (FastAPI)
-├── frontend/
-│   ├── ejercicios-app/            # ✅ Frontend de ejercicios (Next.js)
-│   └── sistema-categorizacion/    # ✅ Frontend de clasificación (Next.js)
-├── generador-ejercicios/          # ✅ Backend generador de ejercicios (FastAPI)
+├── categorizacion/                 # 🎯 Sistema de Clasificación de Perfiles
+│   ├── backend/                   # Backend FastAPI (puerto 8000)
+│   └── frontend/                  # Frontend Next.js (puerto 3000)
+├── sistema-ejercicio/             # 🎯 Sistema Generador de Ejercicios
+│   ├── backend/                   # Backend FastAPI + Gemini AI (puerto 8001)
+│   └── frontend/                  # Frontend Next.js (puerto 3001)
 └── docs/                          # Documentación
 ```
 
@@ -85,14 +86,14 @@ test111/
 El sistema tiene **2 componentes principales** que funcionan juntos:
 
 1. **Sistema de Clasificación de Perfiles** (PRIMERO)
-   - Backend: `backend/` (puerto 8000)
-   - Frontend: `frontend/sistema-categorizacion/` (puerto 3000)
+   - Backend: `categorizacion/backend/` (puerto 8000)
+   - Frontend: `categorizacion/frontend/` (puerto 3000)
    - **Propósito**: Clasificar estudiantes según sus respuestas a un cuestionario
    - **Output**: Perfil del estudiante (nivel, estilo de aprendizaje, etc.)
 
 2. **Sistema Generador de Ejercicios** (SEGUNDO)
-   - Backend: `generador-ejercicios/` (puerto 8001)
-   - Frontend: `frontend/ejercicios-app/` (puerto 3001)
+   - Backend: `sistema-ejercicio/backend/` (puerto 8001)
+   - Frontend: `sistema-ejercicio/frontend/` (puerto 3001)
    - **Propósito**: Generar ejercicios personalizados con Gemini AI
    - **Input**: Usa el perfil del estudiante para personalizar
 
@@ -111,7 +112,7 @@ El sistema tiene **2 componentes principales** que funcionan juntos:
 
 ```bash
 # En Linux/Mac/Git Bash
-cd /home/user/test111/backend
+cd /home/user/test111/categorizacion/backend
 
 # Activar venv
 source venv/bin/activate
@@ -128,7 +129,7 @@ python -m uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 
 **En Windows (PowerShell)**:
 ```powershell
-cd E:\Files\Cheems Heaven\innova-edu-ai_backend\test111\backend
+cd E:\Files\Cheems Heaven\innova-edu-ai_backend\test111\categorizacion\backend
 venv\Scripts\activate
 
 # OPCIÓN 1: Usar script run.py (recomendado)
@@ -152,7 +153,7 @@ python -m uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 
 ```bash
 # En Linux/Mac/Git Bash
-cd /home/user/test111/frontend/sistema-categorizacion
+cd /home/user/test111/categorizacion/frontend
 
 # Instalar dependencias (solo primera vez)
 npm install
@@ -167,7 +168,7 @@ npm run dev
 
 **En Windows (PowerShell)**:
 ```powershell
-cd E:\Files\Cheems Heaven\innova-edu-ai_backend\test111\frontend\sistema-categorizacion
+cd E:\Files\Cheems Heaven\innova-edu-ai_backend\test111\categorizacion\frontend
 npm install
 npm run dev
 ```
@@ -231,7 +232,7 @@ curl -X POST http://localhost:8000/api/clasificar \
 ### 4.1 Navegar al Directorio
 
 ```bash
-cd /home/user/test111/generador-ejercicios
+cd /home/user/test111/sistema-ejercicio/backend
 ```
 
 ### 4.2 Crear Entorno Virtual (Recomendado)
@@ -461,7 +462,7 @@ curl -X POST "http://localhost:8001/api/generar-ejercicios" \
 
 ```bash
 # Nueva terminal
-cd /home/user/test111/frontend/ejercicios-app
+cd /home/user/test111/sistema-ejercicio/frontend
 ```
 
 ### 5.2 Instalar Dependencias
@@ -690,7 +691,7 @@ INFO:     127.0.0.1:XXXXX - "POST /api/sesiones/SES_20251117_EST001_001/completa
 
 Abrir **Terminal 5** (nueva):
 ```bash
-cd /home/user/test111/generador-ejercicios
+cd /home/user/test111/sistema-ejercicio/backend
 
 # Ver sesiones guardadas (con formato bonito)
 cat data/sesiones.json | jq .
@@ -1269,7 +1270,7 @@ python test_e2e.py
 
 **Terminal 1 - Backend Clasificación**:
 ```bash
-cd /home/user/test111/backend
+cd /home/user/test111/categorizacion/backend
 source venv/bin/activate
 # Opción 1 (recomendada):
 python run.py
@@ -1279,20 +1280,20 @@ python -m uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 
 **Terminal 2 - Frontend Clasificación** (nueva terminal):
 ```bash
-cd /home/user/test111/frontend/sistema-categorizacion
+cd /home/user/test111/categorizacion/frontend
 npm run dev
 ```
 
 **Terminal 3 - Backend Generador** (nueva terminal):
 ```bash
-cd /home/user/test111/generador-ejercicios
+cd /home/user/test111/sistema-ejercicio/backend
 source venv/bin/activate
 python -m uvicorn main:app --reload --port 8001
 ```
 
 **Terminal 4 - Frontend Ejercicios** (nueva terminal):
 ```bash
-cd /home/user/test111/frontend/ejercicios-app
+cd /home/user/test111/sistema-ejercicio/frontend
 npm run dev
 ```
 
