@@ -1,0 +1,10 @@
+# Archivos con claves reales - NO COMMITEAR
+http-client.env.json
+*.private.http
+
+# Resultados de tests
+test-results.json
+test-results.log
+
+# Cache
+.http-cache/

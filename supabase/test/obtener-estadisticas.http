@@ -1,0 +1,209 @@
+### =====================================================
+### TESTS: obtener-estadisticas
+### =====================================================
+### Edge Function para obtener estadísticas del sistema
+### =====================================================
+
+### Variables locales
+@baseUrl = http://localhost:54321/functions/v1
+# @baseUrl = https://your-project-ref.supabase.co/functions/v1
+@anonKey = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6ImFub24iLCJleHAiOjE5ODM4MTI5OTZ9.CRXP1A7WOeoJeXxjNni43kdQwgnWNReilDMblYTn_I0
+
+### =====================================================
+### TEST 1: Obtener estadísticas generales
+### =====================================================
+### Estadísticas de todo el sistema
+
+GET {{baseUrl}}/obtener-estadisticas
+Authorization: Bearer {{anonKey}}
+
+### =====================================================
+### TEST 2: Obtener estadísticas de EST001
+### =====================================================
+### Estadísticas específicas de un estudiante
+
+GET {{baseUrl}}/obtener-estadisticas?estudiante_id=EST001
+Authorization: Bearer {{anonKey}}
+
+### =====================================================
+### TEST 3: Obtener estadísticas de EST002
+### =====================================================
+
+GET {{baseUrl}}/obtener-estadisticas?estudiante_id=EST002
+Authorization: Bearer {{anonKey}}
+
+### =====================================================
+### TEST 4: Obtener estadísticas de EST003
+### =====================================================
+
+GET {{baseUrl}}/obtener-estadisticas?estudiante_id=EST003
+Authorization: Bearer {{anonKey}}
+
+### =====================================================
+### TEST 5: Estadísticas de estudiante sin actividad
+### =====================================================
+### Estudiante que existe pero no ha respondido ejercicios
+
+GET {{baseUrl}}/obtener-estadisticas?estudiante_id=EST004
+Authorization: Bearer {{anonKey}}
+
+### =====================================================
+### TEST 6: Error - Estudiante no existe
+### =====================================================
+### Debe retornar estadísticas vacías o error 404
+
+GET {{baseUrl}}/obtener-estadisticas?estudiante_id=EST_NO_EXISTE
+Authorization: Bearer {{anonKey}}
+
+### =====================================================
+### TEST 7: Estadísticas después de crear contenido
+### =====================================================
+
+### Paso 1: Crear estudiante y perfil
+# @name crearEstudiante
+POST {{baseUrl}}/clasificar-perfil
+Authorization: Bearer {{anonKey}}
+Content-Type: application/json
+
+{
+  "estudiante_id": "EST_STATS_001",
+  "grado": "3-4",
+  "nombre": "Luis",
+  "apellido": "González",
+  "edad": 9,
+  "respuestas": {
+    "P1": "A",
+    "P2": "B",
+    "P3": "B",
+    "P4": "A",
+    "P5": "B",
+    "P6": "B",
+    "P7": "A",
+    "P8": "A",
+    "P9": "B",
+    "P10": "A"
+  }
+}
+
+### Paso 2: Generar ejercicios
+# @name generarEjercicios
+POST {{baseUrl}}/generar-ejercicios
+Authorization: Bearer {{anonKey}}
+Content-Type: application/json
+
+{
+  "estudiante_id": "EST_STATS_001",
+  "curso": "matematicas",
+  "cantidad": 5
+}
+
+### Paso 3: Guardar algunas respuestas
+POST {{baseUrl}}/guardar-respuesta
+Authorization: Bearer {{anonKey}}
+Content-Type: application/json
+
+{
+  "estudiante_id": "EST_STATS_001",
+  "ejercicio_id": "MAT_INT_001",
+  "curso": "matematicas",
+  "respuesta_seleccionada": "A",
+  "tiempo_respuesta_ms": 15000
+}
+
+###
+
+POST {{baseUrl}}/guardar-respuesta
+Authorization: Bearer {{anonKey}}
+Content-Type: application/json
+
+{
+  "estudiante_id": "EST_STATS_001",
+  "ejercicio_id": "MAT_INT_002",
+  "curso": "matematicas",
+  "respuesta_seleccionada": "B",
+  "tiempo_respuesta_ms": 12000
+}
+
+### Paso 4: Obtener estadísticas actualizadas
+GET {{baseUrl}}/obtener-estadisticas?estudiante_id=EST_STATS_001
+Authorization: Bearer {{anonKey}}
+
+### =====================================================
+### TEST 8: Verificar estadísticas generales después de actividad
+### =====================================================
+### Las estadísticas generales deben reflejar todos los cambios
+
+GET {{baseUrl}}/obtener-estadisticas
+Authorization: Bearer {{anonKey}}
+
+### =====================================================
+### TEST 9: Comparar estadísticas de múltiples estudiantes
+### =====================================================
+
+### Estudiante 1
+GET {{baseUrl}}/obtener-estadisticas?estudiante_id=EST001
+Authorization: Bearer {{anonKey}}
+
+###
+
+### Estudiante 2
+GET {{baseUrl}}/obtener-estadisticas?estudiante_id=EST002
+Authorization: Bearer {{anonKey}}
+
+###
+
+### Estudiante 3
+GET {{baseUrl}}/obtener-estadisticas?estudiante_id=EST003
+Authorization: Bearer {{anonKey}}
+
+### =====================================================
+### TEST 10: Verificar distribución por categorías
+### =====================================================
+### Las estadísticas generales deben mostrar distribución de perfiles
+
+GET {{baseUrl}}/obtener-estadisticas
+Authorization: Bearer {{anonKey}}
+
+### =====================================================
+### TEST 11: Verificar distribución por nivel de riesgo
+### =====================================================
+
+GET {{baseUrl}}/obtener-estadisticas
+Authorization: Bearer {{anonKey}}
+
+### =====================================================
+### TEST 12: Monitorear evolución de estadísticas
+### =====================================================
+
+### Crear varios perfiles
+POST {{baseUrl}}/clasificar-perfil
+Authorization: Bearer {{anonKey}}
+Content-Type: application/json
+
+{
+  "estudiante_id": "EST_MONITOR_001",
+  "grado": "1-2",
+  "respuestas": {
+    "P1": "C", "P2": "C", "P3": "C", "P4": "C", "P5": "C",
+    "P6": "C", "P7": "B", "P8": "B", "P9": "A", "P10": "B"
+  }
+}
+
+###
+
+POST {{baseUrl}}/clasificar-perfil
+Authorization: Bearer {{anonKey}}
+Content-Type: application/json
+
+{
+  "estudiante_id": "EST_MONITOR_002",
+  "grado": "5-6",
+  "respuestas": {
+    "P1": "D", "P2": "A", "P3": "A", "P4": "B", "P5": "A",
+    "P6": "A", "P7": "A", "P8": "A", "P9": "A", "P10": "C"
+  }
+}
+
+### Ver estadísticas actualizadas
+GET {{baseUrl}}/obtener-estadisticas
+Authorization: Bearer {{anonKey}}

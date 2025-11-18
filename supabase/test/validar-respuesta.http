@@ -1,0 +1,178 @@
+### =====================================================
+### TESTS: validar-respuesta
+### =====================================================
+### Edge Function para validar respuestas sin guardarlas
+### =====================================================
+
+### Variables locales
+@baseUrl = http://localhost:54321/functions/v1
+# @baseUrl = https://your-project-ref.supabase.co/functions/v1
+@anonKey = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6ImFub24iLCJleHAiOjE5ODM4MTI5OTZ9.CRXP1A7WOeoJeXxjNni43kdQwgnWNReilDMblYTn_I0
+
+### =====================================================
+### TEST 1: Validar respuesta correcta
+### =====================================================
+### Verificar si la respuesta "A" es correcta
+
+POST {{baseUrl}}/validar-respuesta
+Authorization: Bearer {{anonKey}}
+Content-Type: application/json
+
+{
+  "ejercicio_id": "MAT_INT_001",
+  "respuesta": "A"
+}
+
+### =====================================================
+### TEST 2: Validar respuesta incorrecta
+### =====================================================
+### Verificar respuesta incorrecta "D"
+
+POST {{baseUrl}}/validar-respuesta
+Authorization: Bearer {{anonKey}}
+Content-Type: application/json
+
+{
+  "ejercicio_id": "MAT_INT_001",
+  "respuesta": "D"
+}
+
+### =====================================================
+### TEST 3: Validar opción B
+### =====================================================
+
+POST {{baseUrl}}/validar-respuesta
+Authorization: Bearer {{anonKey}}
+Content-Type: application/json
+
+{
+  "ejercicio_id": "MAT_INT_002",
+  "respuesta": "B"
+}
+
+### =====================================================
+### TEST 4: Validar opción C
+### =====================================================
+
+POST {{baseUrl}}/validar-respuesta
+Authorization: Bearer {{anonKey}}
+Content-Type: application/json
+
+{
+  "ejercicio_id": "MAT_INT_003",
+  "respuesta": "C"
+}
+
+### =====================================================
+### TEST 5: Error - Ejercicio no existe
+### =====================================================
+### Debe retornar error 404
+
+POST {{baseUrl}}/validar-respuesta
+Authorization: Bearer {{anonKey}}
+Content-Type: application/json
+
+{
+  "ejercicio_id": "EJ_NO_EXISTE",
+  "respuesta": "A"
+}
+
+### =====================================================
+### TEST 6: Error - Datos incompletos (sin respuesta)
+### =====================================================
+### Debe retornar error 400
+
+POST {{baseUrl}}/validar-respuesta
+Authorization: Bearer {{anonKey}}
+Content-Type: application/json
+
+{
+  "ejercicio_id": "MAT_INT_001"
+}
+
+### =====================================================
+### TEST 7: Error - Datos incompletos (sin ejercicio_id)
+### =====================================================
+### Debe retornar error 400
+
+POST {{baseUrl}}/validar-respuesta
+Authorization: Bearer {{anonKey}}
+Content-Type: application/json
+
+{
+  "respuesta": "A"
+}
+
+### =====================================================
+### TEST 8: Validar todas las opciones de un ejercicio
+### =====================================================
+### Probar todas las opciones A, B, C, D
+
+POST {{baseUrl}}/validar-respuesta
+Authorization: Bearer {{anonKey}}
+Content-Type: application/json
+
+{
+  "ejercicio_id": "MAT_INT_004",
+  "respuesta": "A"
+}
+
+###
+
+POST {{baseUrl}}/validar-respuesta
+Authorization: Bearer {{anonKey}}
+Content-Type: application/json
+
+{
+  "ejercicio_id": "MAT_INT_004",
+  "respuesta": "B"
+}
+
+###
+
+POST {{baseUrl}}/validar-respuesta
+Authorization: Bearer {{anonKey}}
+Content-Type: application/json
+
+{
+  "ejercicio_id": "MAT_INT_004",
+  "respuesta": "C"
+}
+
+###
+
+POST {{baseUrl}}/validar-respuesta
+Authorization: Bearer {{anonKey}}
+Content-Type: application/json
+
+{
+  "ejercicio_id": "MAT_INT_004",
+  "respuesta": "D"
+}
+
+### =====================================================
+### TEST 9: Validar ejercicio de verbal
+### =====================================================
+
+POST {{baseUrl}}/validar-respuesta
+Authorization: Bearer {{anonKey}}
+Content-Type: application/json
+
+{
+  "ejercicio_id": "VERBAL_AVZ_001",
+  "respuesta": "C"
+}
+
+### =====================================================
+### TEST 10: Validar con respuesta en minúscula
+### =====================================================
+### Verificar si es case-sensitive
+
+POST {{baseUrl}}/validar-respuesta
+Authorization: Bearer {{anonKey}}
+Content-Type: application/json
+
+{
+  "ejercicio_id": "MAT_INT_001",
+  "respuesta": "a"
+}

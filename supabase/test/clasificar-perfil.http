@@ -1,0 +1,192 @@
+### =====================================================
+### TESTS: clasificar-perfil
+### =====================================================
+### Edge Function para clasificar perfiles de estudiantes
+### =====================================================
+
+### Variables locales (sobrescriben las globales si es necesario)
+@baseUrl = http://localhost:54321/functions/v1
+# @baseUrl = https://your-project-ref.supabase.co/functions/v1
+@anonKey = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6ImFub24iLCJleHAiOjE5ODM4MTI5OTZ9.CRXP1A7WOeoJeXxjNni43kdQwgnWNReilDMblYTn_I0
+
+### =====================================================
+### TEST 1: Clasificar perfil - Estudiante de 3-4 grado
+### =====================================================
+### Perfil: El Científico Resiliente (bajo riesgo)
+
+POST {{baseUrl}}/clasificar-perfil
+Authorization: Bearer {{anonKey}}
+Content-Type: application/json
+
+{
+  "estudiante_id": "EST001",
+  "grado": "3-4",
+  "nombre": "Juan",
+  "apellido": "Pérez",
+  "edad": 9,
+  "respuestas": {
+    "P1": "A",
+    "P2": "B",
+    "P3": "B",
+    "P4": "A",
+    "P5": "B",
+    "P6": "B",
+    "P7": "A",
+    "P8": "A",
+    "P9": "B",
+    "P10": "A"
+  }
+}
+
+### =====================================================
+### TEST 2: Clasificar perfil - Estudiante de 1-2 grado
+### =====================================================
+### Perfil: El Explorador Kinestésico (riesgo medio)
+
+POST {{baseUrl}}/clasificar-perfil
+Authorization: Bearer {{anonKey}}
+Content-Type: application/json
+
+{
+  "estudiante_id": "EST002",
+  "grado": "1-2",
+  "nombre": "María",
+  "apellido": "García",
+  "edad": 7,
+  "respuestas": {
+    "P1": "C",
+    "P2": "C",
+    "P3": "C",
+    "P4": "C",
+    "P5": "C",
+    "P6": "C",
+    "P7": "B",
+    "P8": "B",
+    "P9": "A",
+    "P10": "B"
+  }
+}
+
+### =====================================================
+### TEST 3: Clasificar perfil - Estudiante de 5-6 grado
+### =====================================================
+### Perfil: El Artista Creativo (bajo riesgo)
+
+POST {{baseUrl}}/clasificar-perfil
+Authorization: Bearer {{anonKey}}
+Content-Type: application/json
+
+{
+  "estudiante_id": "EST003",
+  "grado": "5-6",
+  "nombre": "Carlos",
+  "apellido": "López",
+  "edad": 11,
+  "respuestas": {
+    "P1": "D",
+    "P2": "A",
+    "P3": "A",
+    "P4": "B",
+    "P5": "A",
+    "P6": "A",
+    "P7": "A",
+    "P8": "A",
+    "P9": "A",
+    "P10": "C"
+  }
+}
+
+### =====================================================
+### TEST 4: Clasificar perfil - Alto riesgo
+### =====================================================
+### Estudiante con múltiples factores de riesgo
+
+POST {{baseUrl}}/clasificar-perfil
+Authorization: Bearer {{anonKey}}
+Content-Type: application/json
+
+{
+  "estudiante_id": "EST004",
+  "grado": "3-4",
+  "nombre": "Ana",
+  "apellido": "Martínez",
+  "edad": 9,
+  "respuestas": {
+    "P1": "B",
+    "P2": "D",
+    "P3": "D",
+    "P4": "A",
+    "P5": "D",
+    "P6": "D",
+    "P7": "D",
+    "P8": "D",
+    "P9": "A",
+    "P10": "B"
+  }
+}
+
+### =====================================================
+### TEST 5: Error - Datos incompletos
+### =====================================================
+### Debe retornar error 400
+
+POST {{baseUrl}}/clasificar-perfil
+Authorization: Bearer {{anonKey}}
+Content-Type: application/json
+
+{
+  "estudiante_id": "EST005",
+  "grado": "3-4"
+}
+
+### =====================================================
+### TEST 6: Error - Grado inválido
+### =====================================================
+### Debe retornar error de validación
+
+POST {{baseUrl}}/clasificar-perfil
+Authorization: Bearer {{anonKey}}
+Content-Type: application/json
+
+{
+  "estudiante_id": "EST006",
+  "grado": "7-8",
+  "respuestas": {
+    "P1": "A",
+    "P2": "B",
+    "P3": "B",
+    "P4": "A",
+    "P5": "B",
+    "P6": "B",
+    "P7": "A",
+    "P8": "A",
+    "P9": "B",
+    "P10": "A"
+  }
+}
+
+### =====================================================
+### TEST 7: Clasificar perfil - Sin datos opcionales
+### =====================================================
+### Solo campos requeridos
+
+POST {{baseUrl}}/clasificar-perfil
+Authorization: Bearer {{anonKey}}
+Content-Type: application/json
+
+{
+  "estudiante_id": "EST007",
+  "grado": "3-4",
+  "respuestas": {
+    "P1": "A",
+    "P2": "B",
+    "P3": "B",
+    "P4": "A",
+    "P5": "B",
+    "P6": "B",
+    "P7": "A",
+    "P8": "A",
+    "P9": "B",
+    "P10": "A"
+  }
+}

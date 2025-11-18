@@ -1,0 +1,195 @@
+### =====================================================
+### TESTS: generar-ejercicios
+### =====================================================
+### Edge Function para generar ejercicios con Gemini AI
+### =====================================================
+
+### Variables locales
+@baseUrl = http://localhost:54321/functions/v1
+# @baseUrl = https://your-project-ref.supabase.co/functions/v1
+@anonKey = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6ImFub24iLCJleHAiOjE5ODM4MTI5OTZ9.CRXP1A7WOeoJeXxjNni43kdQwgnWNReilDMblYTn_I0
+
+### =====================================================
+### TEST 1: Generar ejercicios de matemáticas
+### =====================================================
+### Genera 3 ejercicios de matemáticas para EST001
+
+POST {{baseUrl}}/generar-ejercicios
+Authorization: Bearer {{anonKey}}
+Content-Type: application/json
+
+{
+  "estudiante_id": "EST001",
+  "curso": "matematicas",
+  "cantidad": 3
+}
+
+### =====================================================
+### TEST 2: Generar ejercicios de matemáticas - Tipo específico
+### =====================================================
+### Genera ejercicios de suma específicamente
+
+POST {{baseUrl}}/generar-ejercicios
+Authorization: Bearer {{anonKey}}
+Content-Type: application/json
+
+{
+  "estudiante_id": "EST001",
+  "curso": "matematicas",
+  "cantidad": 5,
+  "tipo_especifico": "suma"
+}
+
+### =====================================================
+### TEST 3: Generar ejercicios de matemáticas - Nivel forzado
+### =====================================================
+### Forzar nivel avanzado independientemente del perfil
+
+POST {{baseUrl}}/generar-ejercicios
+Authorization: Bearer {{anonKey}}
+Content-Type: application/json
+
+{
+  "estudiante_id": "EST001",
+  "curso": "matematicas",
+  "cantidad": 3,
+  "tipo_especifico": "multiplicacion",
+  "forzar_nivel": "avanzado"
+}
+
+### =====================================================
+### TEST 4: Generar ejercicios de razonamiento verbal
+### =====================================================
+### Genera 3 ejercicios de verbal
+
+POST {{baseUrl}}/generar-ejercicios
+Authorization: Bearer {{anonKey}}
+Content-Type: application/json
+
+{
+  "estudiante_id": "EST001",
+  "curso": "verbal",
+  "cantidad": 3
+}
+
+### =====================================================
+### TEST 5: Generar ejercicios verbal - Tipo específico
+### =====================================================
+### Genera ejercicios de sinónimos
+
+POST {{baseUrl}}/generar-ejercicios
+Authorization: Bearer {{anonKey}}
+Content-Type: application/json
+
+{
+  "estudiante_id": "EST001",
+  "curso": "verbal",
+  "cantidad": 4,
+  "tipo_especifico": "sinonimos"
+}
+
+### =====================================================
+### TEST 6: Generar muchos ejercicios
+### =====================================================
+### Genera 10 ejercicios (máximo permitido)
+
+POST {{baseUrl}}/generar-ejercicios
+Authorization: Bearer {{anonKey}}
+Content-Type: application/json
+
+{
+  "estudiante_id": "EST001",
+  "curso": "matematicas",
+  "cantidad": 10
+}
+
+### =====================================================
+### TEST 7: Error - Estudiante sin perfil
+### =====================================================
+### Debe retornar error 404
+
+POST {{baseUrl}}/generar-ejercicios
+Authorization: Bearer {{anonKey}}
+Content-Type: application/json
+
+{
+  "estudiante_id": "EST_NO_EXISTE",
+  "curso": "matematicas",
+  "cantidad": 3
+}
+
+### =====================================================
+### TEST 8: Error - Curso inválido
+### =====================================================
+### Debe retornar error de validación
+
+POST {{baseUrl}}/generar-ejercicios
+Authorization: Bearer {{anonKey}}
+Content-Type: application/json
+
+{
+  "estudiante_id": "EST001",
+  "curso": "historia",
+  "cantidad": 3
+}
+
+### =====================================================
+### TEST 9: Error - Datos incompletos
+### =====================================================
+### Debe retornar error 400
+
+POST {{baseUrl}}/generar-ejercicios
+Authorization: Bearer {{anonKey}}
+Content-Type: application/json
+
+{
+  "estudiante_id": "EST001"
+}
+
+### =====================================================
+### TEST 10: Generar con estudiante de bajo nivel
+### =====================================================
+### Estudiante EST002 (nivel básico)
+
+POST {{baseUrl}}/generar-ejercicios
+Authorization: Bearer {{anonKey}}
+Content-Type: application/json
+
+{
+  "estudiante_id": "EST002",
+  "curso": "matematicas",
+  "cantidad": 3,
+  "tipo_especifico": "conteo"
+}
+
+### =====================================================
+### TEST 11: Generar con estudiante avanzado
+### =====================================================
+### Estudiante EST003 (nivel avanzado)
+
+POST {{baseUrl}}/generar-ejercicios
+Authorization: Bearer {{anonKey}}
+Content-Type: application/json
+
+{
+  "estudiante_id": "EST003",
+  "curso": "matematicas",
+  "cantidad": 3,
+  "tipo_especifico": "operaciones_combinadas"
+}
+
+### =====================================================
+### TEST 12: Generar ejercicios de comprensión verbal
+### =====================================================
+### Ejercicios de comprensión lectora
+
+POST {{baseUrl}}/generar-ejercicios
+Authorization: Bearer {{anonKey}}
+Content-Type: application/json
+
+{
+  "estudiante_id": "EST003",
+  "curso": "verbal",
+  "cantidad": 2,
+  "tipo_especifico": "comprension"
+}

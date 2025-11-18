@@ -1,0 +1,122 @@
+### =====================================================
+### TESTS: obtener-perfil
+### =====================================================
+### Edge Function para obtener perfil de un estudiante
+### =====================================================
+
+### Variables locales
+@baseUrl = http://localhost:54321/functions/v1
+# @baseUrl = https://your-project-ref.supabase.co/functions/v1
+@anonKey = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6ImFub24iLCJleHAiOjE5ODM4MTI5OTZ9.CRXP1A7WOeoJeXxjNni43kdQwgnWNReilDMblYTn_I0
+
+### =====================================================
+### TEST 1: Obtener perfil de EST001
+### =====================================================
+### Perfil existente - El Científico Resiliente
+
+GET {{baseUrl}}/obtener-perfil?estudiante_id=EST001
+Authorization: Bearer {{anonKey}}
+
+### =====================================================
+### TEST 2: Obtener perfil de EST002
+### =====================================================
+### Perfil existente - El Explorador Kinestésico
+
+GET {{baseUrl}}/obtener-perfil?estudiante_id=EST002
+Authorization: Bearer {{anonKey}}
+
+### =====================================================
+### TEST 3: Obtener perfil de EST003
+### =====================================================
+### Perfil existente - El Artista Creativo
+
+GET {{baseUrl}}/obtener-perfil?estudiante_id=EST003
+Authorization: Bearer {{anonKey}}
+
+### =====================================================
+### TEST 4: Error - Estudiante sin perfil
+### =====================================================
+### Debe retornar error 404
+
+GET {{baseUrl}}/obtener-perfil?estudiante_id=EST_SIN_PERFIL
+Authorization: Bearer {{anonKey}}
+
+### =====================================================
+### TEST 5: Error - Sin parámetro estudiante_id
+### =====================================================
+### Debe retornar error 400
+
+GET {{baseUrl}}/obtener-perfil
+Authorization: Bearer {{anonKey}}
+
+### =====================================================
+### TEST 6: Obtener perfil con ID no existente
+### =====================================================
+
+GET {{baseUrl}}/obtener-perfil?estudiante_id=EST999
+Authorization: Bearer {{anonKey}}
+
+### =====================================================
+### TEST 7: Obtener perfil de EST004
+### =====================================================
+### Estudiante con alto riesgo
+
+GET {{baseUrl}}/obtener-perfil?estudiante_id=EST004
+Authorization: Bearer {{anonKey}}
+
+### =====================================================
+### TEST 8: Obtener perfil recién creado
+### =====================================================
+### Primero crear el perfil
+
+# @name crearPerfil
+POST {{baseUrl}}/clasificar-perfil
+Authorization: Bearer {{anonKey}}
+Content-Type: application/json
+
+{
+  "estudiante_id": "EST_NUEVO_001",
+  "grado": "3-4",
+  "nombre": "Pedro",
+  "apellido": "Ramírez",
+  "edad": 9,
+  "respuestas": {
+    "P1": "B",
+    "P2": "B",
+    "P3": "A",
+    "P4": "C",
+    "P5": "B",
+    "P6": "B",
+    "P7": "B",
+    "P8": "B",
+    "P9": "B",
+    "P10": "A"
+  }
+}
+
+### Ahora obtener el perfil recién creado
+
+GET {{baseUrl}}/obtener-perfil?estudiante_id=EST_NUEVO_001
+Authorization: Bearer {{anonKey}}
+
+### =====================================================
+### TEST 9: Verificar campos del perfil
+### =====================================================
+### Asegurarse que retorna todos los campos necesarios
+
+GET {{baseUrl}}/obtener-perfil?estudiante_id=EST001
+Authorization: Bearer {{anonKey}}
+
+### =====================================================
+### TEST 10: Obtener perfil de estudiante de 1-2 grado
+### =====================================================
+
+GET {{baseUrl}}/obtener-perfil?estudiante_id=EST002
+Authorization: Bearer {{anonKey}}
+
+### =====================================================
+### TEST 11: Obtener perfil de estudiante de 5-6 grado
+### =====================================================
+
+GET {{baseUrl}}/obtener-perfil?estudiante_id=EST003
+Authorization: Bearer {{anonKey}}

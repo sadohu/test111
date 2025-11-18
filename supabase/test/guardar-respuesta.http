@@ -1,0 +1,245 @@
+### =====================================================
+### TESTS: guardar-respuesta
+### =====================================================
+### Edge Function para guardar respuestas de estudiantes
+### =====================================================
+
+### Variables locales
+@baseUrl = http://localhost:54321/functions/v1
+# @baseUrl = https://your-project-ref.supabase.co/functions/v1
+@anonKey = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6ImFub24iLCJleHAiOjE5ODM4MTI5OTZ9.CRXP1A7WOeoJeXxjNni43kdQwgnWNReilDMblYTn_I0
+
+### =====================================================
+### PREREQUISITO: Generar ejercicio primero
+### =====================================================
+### Ejecutar primero para tener un ejercicio válido
+
+# @name generarEjercicio
+POST {{baseUrl}}/generar-ejercicios
+Authorization: Bearer {{anonKey}}
+Content-Type: application/json
+
+{
+  "estudiante_id": "EST001",
+  "curso": "matematicas",
+  "cantidad": 1
+}
+
+### Extraer el ID del ejercicio generado
+@ejercicioId = {{generarEjercicio.response.body.$.ejercicios[0].ejercicio_id}}
+
+### =====================================================
+### TEST 1: Guardar respuesta correcta
+### =====================================================
+### Respuesta correcta con tiempo de respuesta
+
+POST {{baseUrl}}/guardar-respuesta
+Authorization: Bearer {{anonKey}}
+Content-Type: application/json
+
+{
+  "estudiante_id": "EST001",
+  "ejercicio_id": "MAT_INT_001",
+  "curso": "matematicas",
+  "respuesta_seleccionada": "A",
+  "tiempo_respuesta_ms": 15000
+}
+
+### =====================================================
+### TEST 2: Guardar respuesta incorrecta
+### =====================================================
+### Respuesta incorrecta
+
+POST {{baseUrl}}/guardar-respuesta
+Authorization: Bearer {{anonKey}}
+Content-Type: application/json
+
+{
+  "estudiante_id": "EST001",
+  "ejercicio_id": "MAT_INT_001",
+  "curso": "matematicas",
+  "respuesta_seleccionada": "C",
+  "tiempo_respuesta_ms": 8000
+}
+
+### =====================================================
+### TEST 3: Guardar respuesta con sesión
+### =====================================================
+### Respuesta asociada a una sesión
+
+POST {{baseUrl}}/guardar-respuesta
+Authorization: Bearer {{anonKey}}
+Content-Type: application/json
+
+{
+  "estudiante_id": "EST001",
+  "ejercicio_id": "MAT_INT_002",
+  "sesion_id": "SES001",
+  "curso": "matematicas",
+  "respuesta_seleccionada": "B",
+  "tiempo_respuesta_ms": 12500
+}
+
+### =====================================================
+### TEST 4: Guardar respuesta con metadata
+### =====================================================
+### Respuesta con información del dispositivo
+
+POST {{baseUrl}}/guardar-respuesta
+Authorization: Bearer {{anonKey}}
+Content-Type: application/json
+
+{
+  "estudiante_id": "EST001",
+  "ejercicio_id": "MAT_INT_003",
+  "curso": "matematicas",
+  "respuesta_seleccionada": "A",
+  "tiempo_respuesta_ms": 20000,
+  "dispositivo": "tablet"
+}
+
+### =====================================================
+### TEST 5: Guardar respuesta rápida
+### =====================================================
+### Respuesta con tiempo muy corto
+
+POST {{baseUrl}}/guardar-respuesta
+Authorization: Bearer {{anonKey}}
+Content-Type: application/json
+
+{
+  "estudiante_id": "EST001",
+  "ejercicio_id": "MAT_INT_004",
+  "curso": "matematicas",
+  "respuesta_seleccionada": "D",
+  "tiempo_respuesta_ms": 3000
+}
+
+### =====================================================
+### TEST 6: Guardar respuesta lenta
+### =====================================================
+### Respuesta con mucho tiempo de deliberación
+
+POST {{baseUrl}}/guardar-respuesta
+Authorization: Bearer {{anonKey}}
+Content-Type: application/json
+
+{
+  "estudiante_id": "EST002",
+  "ejercicio_id": "MAT_BAS_001",
+  "curso": "matematicas",
+  "respuesta_seleccionada": "B",
+  "tiempo_respuesta_ms": 60000
+}
+
+### =====================================================
+### TEST 7: Guardar respuesta verbal
+### =====================================================
+### Respuesta a ejercicio de razonamiento verbal
+
+POST {{baseUrl}}/guardar-respuesta
+Authorization: Bearer {{anonKey}}
+Content-Type: application/json
+
+{
+  "estudiante_id": "EST003",
+  "ejercicio_id": "VERBAL_AVZ_001",
+  "curso": "verbal",
+  "respuesta_seleccionada": "C",
+  "tiempo_respuesta_ms": 18000
+}
+
+### =====================================================
+### TEST 8: Error - Ejercicio no existe
+### =====================================================
+### Debe retornar error 404
+
+POST {{baseUrl}}/guardar-respuesta
+Authorization: Bearer {{anonKey}}
+Content-Type: application/json
+
+{
+  "estudiante_id": "EST001",
+  "ejercicio_id": "EJ_NO_EXISTE",
+  "curso": "matematicas",
+  "respuesta_seleccionada": "A",
+  "tiempo_respuesta_ms": 10000
+}
+
+### =====================================================
+### TEST 9: Error - Datos incompletos
+### =====================================================
+### Debe retornar error 400
+
+POST {{baseUrl}}/guardar-respuesta
+Authorization: Bearer {{anonKey}}
+Content-Type: application/json
+
+{
+  "estudiante_id": "EST001",
+  "ejercicio_id": "MAT_INT_001"
+}
+
+### =====================================================
+### TEST 10: Guardar sin tiempo de respuesta
+### =====================================================
+### Tiempo de respuesta es opcional
+
+POST {{baseUrl}}/guardar-respuesta
+Authorization: Bearer {{anonKey}}
+Content-Type: application/json
+
+{
+  "estudiante_id": "EST001",
+  "ejercicio_id": "MAT_INT_005",
+  "curso": "matematicas",
+  "respuesta_seleccionada": "B"
+}
+
+### =====================================================
+### TEST 11: Múltiples respuestas del mismo estudiante
+### =====================================================
+### Serie de respuestas para completar sesión
+
+POST {{baseUrl}}/guardar-respuesta
+Authorization: Bearer {{anonKey}}
+Content-Type: application/json
+
+{
+  "estudiante_id": "EST001",
+  "ejercicio_id": "MAT_INT_006",
+  "sesion_id": "SES002",
+  "curso": "matematicas",
+  "respuesta_seleccionada": "A",
+  "tiempo_respuesta_ms": 15000
+}
+
+###
+
+POST {{baseUrl}}/guardar-respuesta
+Authorization: Bearer {{anonKey}}
+Content-Type: application/json
+
+{
+  "estudiante_id": "EST001",
+  "ejercicio_id": "MAT_INT_007",
+  "sesion_id": "SES002",
+  "curso": "matematicas",
+  "respuesta_seleccionada": "C",
+  "tiempo_respuesta_ms": 12000
+}
+
+###
+
+POST {{baseUrl}}/guardar-respuesta
+Authorization: Bearer {{anonKey}}
+Content-Type: application/json
+
+{
+  "estudiante_id": "EST001",
+  "ejercicio_id": "MAT_INT_008",
+  "sesion_id": "SES002",
+  "curso": "matematicas",
+  "respuesta_seleccionada": "B",
+  "tiempo_respuesta_ms": 18000
+}
