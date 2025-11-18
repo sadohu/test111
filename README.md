@@ -49,6 +49,8 @@ test111/
 
 ## 🚀 Quick Start
 
+**🪟 ¿Usas Windows?** → Lee **[README-WINDOWS.md](README-WINDOWS.md)** para instrucciones específicas y un script de inicio automático.
+
 ### 1️⃣ Sistema de Clasificación de Perfiles
 
 Clasifica estudiantes mediante cuestionarios psicopedagógicos.
