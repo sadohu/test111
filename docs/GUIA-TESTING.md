@@ -116,20 +116,31 @@ cd /home/user/test111/backend
 # Activar venv
 source venv/bin/activate
 
-# Verificar .env existe
-cat .env.local
-# Debe mostrar: DATABASE_URL=...
+# Verificar .env existe (opcional, pero recomendado)
+cat .env.local 2>/dev/null || echo ".env no encontrado (opcional)"
 
-# Levantar servidor
-python -m uvicorn main:app --reload --host 0.0.0.0 --port 8000
+# OPCIÓN 1: Usar script run.py (recomendado, funciona en todos los sistemas)
+python run.py
+
+# OPCIÓN 2: Usar uvicorn directamente
+python -m uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 ```
 
 **En Windows (PowerShell)**:
 ```powershell
 cd E:\Files\Cheems Heaven\innova-edu-ai_backend\test111\backend
 venv\Scripts\activate
-python -m uvicorn main:app --reload --host 0.0.0.0 --port 8000
+
+# OPCIÓN 1: Usar script run.py (recomendado)
+python run.py
+
+# OPCIÓN 2: Usar uvicorn directamente
+python -m uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 ```
+
+**⚠️ IMPORTANTE**:
+- El comando es `app.main:app` (NO `main:app`)
+- El script `run.py` configura todo automáticamente
 
 **✅ Verificar**:
 - Abrir: http://localhost:8000/docs
@@ -1260,7 +1271,10 @@ python test_e2e.py
 ```bash
 cd /home/user/test111/backend
 source venv/bin/activate
-python -m uvicorn main:app --reload --host 0.0.0.0 --port 8000
+# Opción 1 (recomendada):
+python run.py
+# Opción 2:
+python -m uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 ```
 
 **Terminal 2 - Frontend Clasificación** (nueva terminal):
