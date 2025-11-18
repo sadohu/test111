@@ -1,0 +1,33 @@
+# Supabase local files
+.branches
+.temp
+
+# Environment files with real credentials
+.env
+.env.local
+.env.production
+
+# Logs
+*.log
+
+# Database dumps
+*.sql.backup
+*.dump
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Node modules (if any)
+node_modules/
+
+# Build outputs
+dist/
+build/
