@@ -1,0 +1,432 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* =====================================================
+   SISTEMA DE DISEÑO - VARIABLES CSS
+   ===================================================== */
+
+@layer base {
+  :root {
+    /* Colores Base */
+    --background: 0 0% 100%;
+    --foreground: 222.2 47.4% 11.2%;
+
+    /* Colores de Marca (Educación) */
+    --primary: 217 91% 60%;        /* Azul educativo brillante */
+    --primary-foreground: 0 0% 100%;
+    --primary-hover: 217 91% 50%;
+
+    --secondary: 142 76% 36%;      /* Verde éxito/crecimiento */
+    --secondary-foreground: 0 0% 100%;
+    --secondary-hover: 142 76% 30%;
+
+    --accent: 262 83% 58%;         /* Púrpura creatividad */
+    --accent-foreground: 0 0% 100%;
+    --accent-hover: 262 83% 48%;
+
+    /* Estados */
+    --success: 142 76% 36%;        /* Verde */
+    --success-foreground: 0 0% 100%;
+    --success-light: 142 76% 95%;
+
+    --error: 0 84% 60%;            /* Rojo */
+    --error-foreground: 0 0% 100%;
+    --error-light: 0 84% 95%;
+
+    --warning: 38 92% 50%;         /* Naranja */
+    --warning-foreground: 0 0% 100%;
+    --warning-light: 38 92% 95%;
+
+    --info: 199 89% 48%;           /* Azul claro */
+    --info-foreground: 0 0% 100%;
+    --info-light: 199 89% 95%;
+
+    /* Neutrales */
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 47.4% 11.2%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 47.4% 11.2%;
+
+    /* Bordes */
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 217 91% 60%;
+
+    /* Radius */
+    --radius: 0.75rem;              /* 12px - más redondeado para eduación */
+    --radius-sm: 0.5rem;           /* 8px */
+    --radius-lg: 1rem;             /* 16px */
+    --radius-xl: 1.5rem;           /* 24px */
+
+    /* Sombras */
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+    --shadow-md: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+    --shadow-lg: 0 20px 25px -5px rgb(0 0 0 / 0.1);
+    --shadow-xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+
+    /* Transiciones */
+    --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-fast: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-slow: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* Modo Oscuro (Opcional) */
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+
+    --primary: 217 91% 60%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+
+    --secondary: 142 76% 36%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+  }
+}
+
+/* =====================================================
+   ESTILOS BASE
+   ===================================================== */
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    @apply scroll-smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: 'Inter', 'Segoe UI', 'Roboto', 'Arial', sans-serif;
+    font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+  }
+
+  /* Headings */
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-bold tracking-tight;
+  }
+
+  h1 {
+    @apply text-4xl md:text-5xl lg:text-6xl;
+  }
+
+  h2 {
+    @apply text-3xl md:text-4xl lg:text-5xl;
+  }
+
+  h3 {
+    @apply text-2xl md:text-3xl lg:text-4xl;
+  }
+
+  h4 {
+    @apply text-xl md:text-2xl lg:text-3xl;
+  }
+
+  /* Links */
+  a {
+    @apply text-primary underline-offset-4 hover:underline transition-colors;
+  }
+
+  /* Focus States */
+  *:focus-visible {
+    @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background;
+  }
+}
+
+/* =====================================================
+   COMPONENTES REUTILIZABLES
+   ===================================================== */
+
+@layer components {
+  /* Botones */
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-sm font-semibold transition-all duration-200 disabled:opacity-50 disabled:pointer-events-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2;
+  }
+
+  .btn-primary {
+    @apply bg-primary text-primary-foreground hover:bg-primary/90 shadow-sm hover:shadow-md;
+  }
+
+  .btn-secondary {
+    @apply bg-secondary text-secondary-foreground hover:bg-secondary/90 shadow-sm hover:shadow-md;
+  }
+
+  .btn-accent {
+    @apply bg-accent text-accent-foreground hover:bg-accent/90 shadow-sm hover:shadow-md;
+  }
+
+  .btn-outline {
+    @apply border-2 border-primary text-primary bg-transparent hover:bg-primary hover:text-primary-foreground;
+  }
+
+  .btn-ghost {
+    @apply bg-transparent hover:bg-muted text-foreground;
+  }
+
+  .btn-link {
+    @apply bg-transparent underline-offset-4 hover:underline text-primary px-0;
+  }
+
+  .btn-success {
+    @apply bg-success text-success-foreground hover:bg-success/90 shadow-sm;
+  }
+
+  .btn-error {
+    @apply bg-error text-error-foreground hover:bg-error/90 shadow-sm;
+  }
+
+  .btn-sm {
+    @apply px-3 py-2 text-xs;
+  }
+
+  .btn-lg {
+    @apply px-6 py-3.5 text-base;
+  }
+
+  .btn-xl {
+    @apply px-8 py-4 text-lg;
+  }
+
+  /* Cards */
+  .card {
+    @apply bg-card text-card-foreground rounded-xl border border-border shadow-sm;
+  }
+
+  .card-hover {
+    @apply hover:shadow-md transition-shadow duration-200;
+  }
+
+  .card-interactive {
+    @apply hover:shadow-lg hover:border-primary/50 cursor-pointer transition-all duration-200;
+  }
+
+  /* Inputs */
+  .input {
+    @apply flex h-11 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50;
+  }
+
+  .input-error {
+    @apply border-error focus-visible:ring-error;
+  }
+
+  /* Badges */
+  .badge {
+    @apply inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold transition-colors;
+  }
+
+  .badge-primary {
+    @apply bg-primary/10 text-primary;
+  }
+
+  .badge-secondary {
+    @apply bg-secondary/10 text-secondary;
+  }
+
+  .badge-success {
+    @apply bg-success/10 text-success;
+  }
+
+  .badge-error {
+    @apply bg-error/10 text-error;
+  }
+
+  .badge-warning {
+    @apply bg-warning/10 text-warning;
+  }
+
+  .badge-info {
+    @apply bg-info/10 text-info;
+  }
+
+  /* Alerts */
+  .alert {
+    @apply relative w-full rounded-lg border p-4;
+  }
+
+  .alert-success {
+    @apply border-success/50 bg-success-light text-success;
+  }
+
+  .alert-error {
+    @apply border-error/50 bg-error-light text-error;
+  }
+
+  .alert-warning {
+    @apply border-warning/50 bg-warning-light text-warning;
+  }
+
+  .alert-info {
+    @apply border-info/50 bg-info-light text-info;
+  }
+
+  /* Container */
+  .container-app {
+    @apply container mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  /* Skeleton Loading */
+  .skeleton {
+    @apply animate-pulse bg-muted rounded;
+  }
+
+  /* Progress Bar */
+  .progress-bar {
+    @apply w-full h-2 bg-muted rounded-full overflow-hidden;
+  }
+
+  .progress-bar-fill {
+    @apply h-full bg-gradient-to-r from-primary to-secondary rounded-full transition-all duration-500;
+  }
+}
+
+/* =====================================================
+   UTILIDADES PERSONALIZADAS
+   ===================================================== */
+
+@layer utilities {
+  /* Text Balance */
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  /* Gradientes */
+  .gradient-primary {
+    @apply bg-gradient-to-r from-primary to-accent;
+  }
+
+  .gradient-success {
+    @apply bg-gradient-to-r from-success to-secondary;
+  }
+
+  .gradient-background {
+    @apply bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50;
+  }
+
+  /* Animaciones */
+  .animate-fade-in {
+    animation: fade-in 0.3s ease-out;
+  }
+
+  .animate-slide-up {
+    animation: slide-up 0.4s ease-out;
+  }
+
+  .animate-slide-down {
+    animation: slide-down 0.4s ease-out;
+  }
+
+  .animate-scale-in {
+    animation: scale-in 0.3s ease-out;
+  }
+
+  /* Efectos de Hover */
+  .hover-lift {
+    @apply transition-transform duration-200 hover:-translate-y-1;
+  }
+
+  .hover-grow {
+    @apply transition-transform duration-200 hover:scale-105;
+  }
+
+  /* Scrollbar */
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-track {
+    @apply bg-muted rounded;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    @apply bg-border rounded hover:bg-border/80;
+  }
+
+  /* Focus Ring */
+  .focus-ring {
+    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2;
+  }
+}
+
+/* =====================================================
+   ANIMACIONES KEYFRAMES
+   ===================================================== */
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slide-down {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* =====================================================
+   RESPONSIVE UTILITIES
+   ===================================================== */
+
+/* Hide scrollbar but keep functionality */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Print Styles */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+}
