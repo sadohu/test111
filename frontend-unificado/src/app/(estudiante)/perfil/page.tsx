@@ -12,8 +12,11 @@ import {
 import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
 import { Alert } from '@/components/ui/Alert';
+import { PerfilService, AuthService } from '@/services';
+import { useRouter } from 'next/navigation';
 
 export default function PerfilPage() {
+  const router = useRouter();
   const [perfil, setPerfil] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [showSuccess, setShowSuccess] = useState(false);
@@ -23,27 +26,23 @@ export default function PerfilPage() {
       setIsLoading(true);
 
       try {
-        // TODO: Obtener estudiante_id del localStorage
-        const estudianteId =
-          localStorage.getItem('estudiante_id') || 'EST001';
+        // Obtener estudiante_id del AuthService
+        const estudianteId = AuthService.getEstudianteId();
 
-        // TODO: Llamar al servicio para obtener perfil
-        // const resultado = await PerfilService.obtenerPerfil(estudianteId);
+        if (!estudianteId) {
+          console.error('No se encontró el ID del estudiante');
+          setIsLoading(false);
+          return;
+        }
 
-        // Simulación temporal
-        await new Promise((resolve) => setTimeout(resolve, 1000));
+        // Llamar al servicio para obtener perfil
+        const resultado = await PerfilService.obtenerPerfil(estudianteId);
 
-        setPerfil({
-          estudiante_id: 'EST001',
-          nombre: 'Juan Pérez',
-          grado: '3-4',
-          categoria_principal: 'explorador_creativo',
-          estilo_aprendizaje: 'visual',
-          nivel_riesgo: 'bajo',
-          fortalezas: ['Matemáticas', 'Creatividad', 'Resolución de problemas'],
-          areas_mejora: ['Lectura comprensiva', 'Ortografía'],
-          motivacion: 'alta',
-        });
+        if (resultado.success && resultado.perfil) {
+          setPerfil(resultado.perfil);
+        } else {
+          console.error('Error al obtener perfil:', resultado.error);
+        }
       } catch (error) {
         console.error('Error al cargar perfil:', error);
       } finally {
@@ -55,8 +54,8 @@ export default function PerfilPage() {
   }, []);
 
   const handleReconfigurar = () => {
-    // TODO: Redirigir a cuestionario de categorización
-    window.location.href = '/categorizar';
+    // Redirigir a cuestionario de categorización
+    router.push('/categorizar');
   };
 
   if (isLoading) {

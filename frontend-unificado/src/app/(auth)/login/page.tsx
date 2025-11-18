@@ -14,6 +14,7 @@ import {
 import { Input } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
 import { Alert } from '@/components/ui/Alert';
+import { AuthService } from '@/services';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -57,18 +58,20 @@ export default function LoginPage() {
     setIsLoading(true);
 
     try {
-      // TODO: Implementar llamada al API de autenticación
-      // const response = await AuthService.login(formData);
+      // Llamar al servicio de autenticación
+      const response = await AuthService.login(formData);
 
-      // Simulación temporal
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      if (!response.success || !response.token) {
+        throw new Error(response.error || 'Error al iniciar sesión');
+      }
 
-      // Guardar token en localStorage
-      // localStorage.setItem('auth_token', response.token);
-      // localStorage.setItem('estudiante_id', response.estudiante_id);
-
-      // Redirigir al dashboard o categorización si no tiene perfil
-      router.push('/ejercicios');
+      // El token ya fue guardado por AuthService
+      // Redirigir según si tiene perfil o no
+      if (response.tiene_perfil) {
+        router.push('/ejercicios');
+      } else {
+        router.push('/categorizar');
+      }
     } catch (error) {
       setApiError(
         error instanceof Error

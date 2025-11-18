@@ -9,6 +9,7 @@ import {
   CardContent,
 } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
+import { EstadisticasService, AuthService } from '@/services';
 
 export default function ReportesPage() {
   const [estadisticas, setEstadisticas] = useState<any>(null);
@@ -19,48 +20,30 @@ export default function ReportesPage() {
       setIsLoading(true);
 
       try {
-        // TODO: Obtener estudiante_id del localStorage
-        const estudianteId =
-          localStorage.getItem('estudiante_id') || 'EST001';
+        // Obtener estudiante_id del AuthService
+        const estudianteId = AuthService.getEstudianteId();
 
-        // TODO: Llamar al servicio de estadísticas
-        // const resultado = await EstadisticasService.obtenerEstadisticas(estudianteId);
+        if (!estudianteId) {
+          console.error('No se encontró el ID del estudiante');
+          setIsLoading(false);
+          return;
+        }
 
-        // Simulación temporal
-        await new Promise((resolve) => setTimeout(resolve, 1000));
+        // Llamar al servicio de estadísticas
+        const resultado = await EstadisticasService.obtenerEstadisticasEstudiante(estudianteId);
 
-        setEstadisticas({
-          total_ejercicios: 45,
-          ejercicios_correctos: 38,
-          racha_actual: 7,
-          mejor_racha: 12,
-          promedio_por_materia: [
-            { materia: 'Matemáticas', correctas: 15, total: 18 },
-            { materia: 'Lectura', correctas: 12, total: 15 },
-            { materia: 'Ciencias', correctas: 8, total: 10 },
-            { materia: 'Inglés', correctas: 3, total: 2 },
-          ],
-          actividad_reciente: [
-            {
-              fecha: '2025-01-15',
-              ejercicios: 8,
-              correctas: 7,
-              materia: 'Matemáticas',
-            },
-            {
-              fecha: '2025-01-14',
-              ejercicios: 5,
-              correctas: 4,
-              materia: 'Lectura',
-            },
-            {
-              fecha: '2025-01-13',
-              ejercicios: 10,
-              correctas: 9,
-              materia: 'Ciencias',
-            },
-          ],
-        });
+        if (resultado.success && resultado.estadisticas) {
+          // Adaptar los datos al formato esperado por el UI (si es necesario)
+          setEstadisticas(resultado.estadisticas);
+        } else {
+          console.error('Error al obtener estadísticas:', resultado.error);
+          // Mantener UI sin crashear con datos de ejemplo si falla
+          setEstadisticas({
+            total_respuestas: 0,
+            respuestas_correctas: 0,
+            porcentaje_acierto: 0,
+          });
+        }
       } catch (error) {
         console.error('Error al cargar estadísticas:', error);
       } finally {

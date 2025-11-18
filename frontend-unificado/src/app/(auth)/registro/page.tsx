@@ -14,6 +14,7 @@ import {
 import { Input } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
 import { Alert } from '@/components/ui/Alert';
+import { AuthService } from '@/services';
 
 export default function RegistroPage() {
   const router = useRouter();
@@ -79,21 +80,19 @@ export default function RegistroPage() {
     setIsLoading(true);
 
     try {
-      // TODO: Implementar llamada al API de registro
-      // const response = await AuthService.register({
-      //   nombre: formData.nombre,
-      //   email: formData.email,
-      //   password: formData.password,
-      // });
+      // Llamar al servicio de registro
+      const response = await AuthService.register({
+        nombre: formData.nombre,
+        email: formData.email,
+        password: formData.password,
+      });
 
-      // Simulación temporal
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      if (!response.success || !response.token) {
+        throw new Error(response.error || 'Error al crear la cuenta');
+      }
 
-      // Guardar token y redirigir a categorización
-      // localStorage.setItem('auth_token', response.token);
-      // localStorage.setItem('estudiante_id', response.estudiante_id);
-
-      // Redirigir a categorización de perfil
+      // El token ya fue guardado por AuthService
+      // Redirigir a categorización (nuevo usuario siempre va a categorización)
       router.push('/categorizar');
     } catch (error) {
       setApiError(

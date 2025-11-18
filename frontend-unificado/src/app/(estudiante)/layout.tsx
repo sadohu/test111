@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/Button';
+import { AuthService } from '@/services';
 
 /**
  * Layout para el área de estudiantes (ejercicios, reportes, perfil)
@@ -18,10 +19,10 @@ export default function EstudianteLayout({
   const router = useRouter();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-  const handleLogout = () => {
-    // TODO: Limpiar localStorage y redirigir a login
-    localStorage.removeItem('auth_token');
-    localStorage.removeItem('estudiante_id');
+  const handleLogout = async () => {
+    // Llamar al servicio de logout
+    await AuthService.logout();
+    // Redirigir a login
     router.push('/login');
   };
 

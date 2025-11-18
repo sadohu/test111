@@ -12,6 +12,7 @@ import {
 import { Button } from '@/components/ui/Button';
 import { Alert } from '@/components/ui/Alert';
 import { Badge } from '@/components/ui/Badge';
+import { PerfilService, AuthService } from '@/services';
 
 // Tipos para las respuestas del formulario
 type RespuestasFormulario = {
@@ -173,18 +174,28 @@ export default function CategorizarPage() {
     setApiError(null);
 
     try {
-      // TODO: Obtener estudiante_id del localStorage o contexto de autenticación
-      const estudianteId = localStorage.getItem('estudiante_id') || 'EST001';
+      // Obtener estudiante_id del AuthService
+      const estudianteId = AuthService.getEstudianteId();
 
-      // TODO: Llamar al servicio de clasificación
-      // const resultado = await PerfilService.clasificarPerfil({
-      //   estudiante_id: estudianteId,
-      //   grado,
-      //   respuestas,
-      // });
+      if (!estudianteId) {
+        throw new Error('No se encontró el ID del estudiante. Por favor, inicia sesión nuevamente.');
+      }
 
-      // Simulación temporal
-      await new Promise((resolve) => setTimeout(resolve, 1500));
+      // Llamar al servicio de clasificación
+      const resultado = await PerfilService.clasificarPerfil({
+        estudiante_id: estudianteId,
+        grado,
+        nombre: '', // El backend puede obtener esto del estudiante
+        apellido: '',
+        respuestas,
+      });
+
+      if (!resultado.success) {
+        throw new Error(resultado.error || 'Error al clasificar perfil');
+      }
+
+      // Marcar perfil como completado
+      AuthService.marcarPerfilCompletado();
 
       // Redirigir al dashboard de ejercicios
       router.push('/ejercicios');

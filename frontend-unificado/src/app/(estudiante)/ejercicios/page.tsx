@@ -13,6 +13,7 @@ import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
 import { Alert } from '@/components/ui/Alert';
 import { Input } from '@/components/ui/Input';
+import { EjerciciosService, AuthService } from '@/services';
 
 export default function EjerciciosPage() {
   const [isGenerating, setIsGenerating] = useState(false);
@@ -29,37 +30,26 @@ export default function EjerciciosPage() {
     setApiError(null);
 
     try {
-      // TODO: Obtener estudiante_id del localStorage
-      const estudianteId = localStorage.getItem('estudiante_id') || 'EST001';
+      // Obtener estudiante_id del AuthService
+      const estudianteId = AuthService.getEstudianteId();
 
-      // TODO: Llamar al servicio de generación de ejercicios
-      // const resultado = await EjerciciosService.generarEjercicios({
-      //   estudiante_id: estudianteId,
-      //   curso: configuracion.curso,
-      //   cantidad: configuracion.cantidad,
-      //   nivel: configuracion.nivel,
-      // });
+      if (!estudianteId) {
+        throw new Error('No se encontró el ID del estudiante. Por favor, inicia sesión nuevamente.');
+      }
 
-      // Simulación temporal
-      await new Promise((resolve) => setTimeout(resolve, 2000));
+      // Llamar al servicio de generación de ejercicios
+      const resultado = await EjerciciosService.generarEjercicios({
+        estudiante_id: estudianteId,
+        curso: configuracion.curso,
+        cantidad: configuracion.cantidad,
+        nivel: configuracion.nivel,
+      });
 
-      // Datos de ejemplo
-      const ejerciciosEjemplo = [
-        {
-          id: 'EJ001',
-          pregunta: '¿Cuánto es 15 + 23?',
-          opciones: ['35', '38', '40', '42'],
-          respuesta_correcta: '38',
-        },
-        {
-          id: 'EJ002',
-          pregunta: '¿Cuál es el resultado de 7 × 8?',
-          opciones: ['54', '56', '58', '64'],
-          respuesta_correcta: '56',
-        },
-      ];
+      if (!resultado.success || !resultado.ejercicios) {
+        throw new Error(resultado.error || 'Error al generar ejercicios');
+      }
 
-      setEjercicios(ejerciciosEjemplo);
+      setEjercicios(resultado.ejercicios);
     } catch (error) {
       setApiError(
         error instanceof Error
