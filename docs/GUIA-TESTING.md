@@ -1,7 +1,16 @@
-# Guía de Testing - Generador de Ejercicios con Gemini AI
+# Guía de Testing - Sistema Completo de Ejercicios con IA
 
 **Fecha**: 17 de Noviembre, 2025
 **Objetivo**: Guía práctica para levantar y testear todos los componentes del sistema
+
+**⚠️ IMPORTANTE**: Este sistema tiene **2 componentes principales** que trabajan juntos:
+
+1. **Sistema de Clasificación de Perfiles** → Clasifica estudiantes mediante cuestionarios
+2. **Sistema Generador de Ejercicios** → Genera ejercicios personalizados con Gemini AI
+
+**Flujo completo**: Clasificación → Generación de Ejercicios → Tracking → Adaptación de Nivel
+
+**Se requieren 4 servidores corriendo simultáneamente** para el flujo end-to-end completo.
 
 ---
 
@@ -9,12 +18,14 @@
 
 1. [Pre-requisitos](#pre-requisitos)
 2. [Setup Inicial](#setup-inicial)
-3. [Testing Backend (FastAPI)](#testing-backend-fastapi)
-4. [Testing Gemini AI](#testing-gemini-ai)
-5. [Testing Frontend (Next.js)](#testing-frontend-nextjs)
-6. [Testing End-to-End](#testing-end-to-end)
-7. [Troubleshooting](#troubleshooting)
-8. [Checklist de Verificación](#checklist-de-verificación)
+3. [Testing Sistema de Clasificación de Perfiles](#testing-sistema-de-clasificación-de-perfiles)
+4. [Testing Backend Generador de Ejercicios](#testing-backend-generador-de-ejercicios-fastapi)
+5. [Testing Gemini AI](#testing-gemini-ai)
+6. [Testing Frontend Ejercicios](#testing-frontend-nextjs)
+7. [Testing End-to-End - Flujo Completo](#testing-end-to-end)
+8. [Troubleshooting](#troubleshooting)
+9. [Checklist de Verificación](#checklist-de-verificación)
+10. [Resumen Ejecutivo](#resumen-ejecutivo)
 
 ---
 
@@ -61,29 +72,158 @@ cd /home/user/test111
 
 ```
 test111/
-├── backend/                        # Backend de clasificación (no usar)
+├── backend/                        # ✅ Backend de clasificación (FastAPI)
 ├── frontend/
-│   ├── ejercicios-app/            # ✅ Frontend de ejercicios (USAR)
-│   └── sistema-categorizacion/    # Frontend de clasificación (no usar)
-├── generador-ejercicios/          # ✅ Backend de ejercicios (USAR)
+│   ├── ejercicios-app/            # ✅ Frontend de ejercicios (Next.js)
+│   └── sistema-categorizacion/    # ✅ Frontend de clasificación (Next.js)
+├── generador-ejercicios/          # ✅ Backend generador de ejercicios (FastAPI)
 └── docs/                          # Documentación
 ```
 
-**Proyectos a testear**:
-1. ✅ `generador-ejercicios/` - Backend FastAPI
-2. ✅ `frontend/ejercicios-app/` - Frontend Next.js
+**⚠️ IMPORTANTE - Orden de Testing**:
+
+El sistema tiene **2 componentes principales** que funcionan juntos:
+
+1. **Sistema de Clasificación de Perfiles** (PRIMERO)
+   - Backend: `backend/` (puerto 8000)
+   - Frontend: `frontend/sistema-categorizacion/` (puerto 3000)
+   - **Propósito**: Clasificar estudiantes según sus respuestas a un cuestionario
+   - **Output**: Perfil del estudiante (nivel, estilo de aprendizaje, etc.)
+
+2. **Sistema Generador de Ejercicios** (SEGUNDO)
+   - Backend: `generador-ejercicios/` (puerto 8001)
+   - Frontend: `frontend/ejercicios-app/` (puerto 3001)
+   - **Propósito**: Generar ejercicios personalizados con Gemini AI
+   - **Input**: Usa el perfil del estudiante para personalizar
+
+**Flujo Completo**:
+```
+1. Clasificación → 2. Generación de Ejercicios → 3. Tracking
+```
 
 ---
 
-## 3. Testing Backend (FastAPI)
+## 3. Testing Sistema de Clasificación de Perfiles
 
-### 3.1 Navegar al Directorio
+### 3.1 Levantar Backend de Clasificación
+
+**Terminal 1**:
+
+```bash
+# En Linux/Mac/Git Bash
+cd /home/user/test111/backend
+
+# Activar venv
+source venv/bin/activate
+
+# Verificar .env existe
+cat .env.local
+# Debe mostrar: DATABASE_URL=...
+
+# Levantar servidor
+python -m uvicorn main:app --reload --host 0.0.0.0 --port 8000
+```
+
+**En Windows (PowerShell)**:
+```powershell
+cd E:\Files\Cheems Heaven\innova-edu-ai_backend\test111\backend
+venv\Scripts\activate
+python -m uvicorn main:app --reload --host 0.0.0.0 --port 8000
+```
+
+**✅ Verificar**:
+- Abrir: http://localhost:8000/docs
+- Deberías ver Swagger UI con endpoints de clasificación
+
+### 3.2 Levantar Frontend de Clasificación
+
+**Terminal 2** (nueva terminal):
+
+```bash
+# En Linux/Mac/Git Bash
+cd /home/user/test111/frontend/sistema-categorizacion
+
+# Instalar dependencias (solo primera vez)
+npm install
+
+# Verificar configuración
+cat .env.local
+# Debe mostrar: NEXT_PUBLIC_API_URL=http://localhost:8000
+
+# Levantar servidor
+npm run dev
+```
+
+**En Windows (PowerShell)**:
+```powershell
+cd E:\Files\Cheems Heaven\innova-edu-ai_backend\test111\frontend\sistema-categorizacion
+npm install
+npm run dev
+```
+
+**✅ Verificar**:
+- Abrir: http://localhost:3000
+- Deberías ver formulario de clasificación
+
+### 3.3 Test: Clasificar un Estudiante
+
+**Flujo de clasificación**:
+
+1. **Abrir**: http://localhost:3000
+
+2. **Rellenar formulario**:
+   - Grado: `3-4 primaria`
+   - Edad: `9 años`
+   - Responder preguntas de matemáticas (4 preguntas)
+   - Responder preguntas de razonamiento verbal (4 preguntas)
+
+3. **Click**: "Ver Resultado"
+
+4. **Verificar resultado**:
+   ```json
+   {
+     "nivel_matematicas": "intermedio",
+     "nivel_verbal": "basico",
+     "estilo_aprendizaje": "visual",
+     "velocidad_aprendizaje": "moderada"
+   }
+   ```
+
+5. **IMPORTANTE**: Guardar este perfil (lo usaremos en el generador)
+
+**Endpoint directo** (alternativa):
+```bash
+curl -X POST http://localhost:8000/api/clasificar \
+  -H "Content-Type: application/json" \
+  -d '{
+    "grado": "3-4",
+    "edad": 9,
+    "respuestas_matematicas": [
+      {"pregunta_id": 1, "respuesta": "A", "correcta": true, "tiempo_segundos": 30},
+      {"pregunta_id": 2, "respuesta": "B", "correcta": true, "tiempo_segundos": 25},
+      {"pregunta_id": 3, "respuesta": "C", "correcta": false, "tiempo_segundos": 40},
+      {"pregunta_id": 4, "respuesta": "A", "correcta": true, "tiempo_segundos": 20}
+    ],
+    "respuestas_verbal": [
+      {"pregunta_id": 1, "respuesta": "A", "correcta": true, "tiempo_segundos": 35},
+      {"pregunta_id": 2, "respuesta": "B", "correcta": false, "tiempo_segundos": 45},
+      {"pregunta_id": 3, "respuesta": "C", "correcta": true, "tiempo_segundos": 30},
+      {"pregunta_id": 4, "respuesta": "D", "correcta": true, "tiempo_segundos": 25}
+    ]
+  }'
+```
+
+---
+
+## 4. Testing Backend Generador de Ejercicios (FastAPI)
+
+### 4.1 Navegar al Directorio
 
 ```bash
 cd /home/user/test111/generador-ejercicios
 ```
 
-### 3.2 Crear Entorno Virtual (Recomendado)
+### 4.2 Crear Entorno Virtual (Recomendado)
 
 ```bash
 # Crear entorno virtual
@@ -99,7 +239,7 @@ venv\Scripts\activate
 # Deberías ver (venv) al inicio de tu terminal
 ```
 
-### 3.3 Instalar Dependencias
+### 4.3 Instalar Dependencias
 
 ```bash
 pip install -r requirements.txt
@@ -110,7 +250,7 @@ pip install -r requirements.txt
 Successfully installed fastapi-0.104.1 uvicorn-0.24.0 pydantic-2.5.0 ...
 ```
 
-### 3.4 Configurar Variables de Entorno
+### 4.4 Configurar Variables de Entorno
 
 ```bash
 # Copiar archivo de ejemplo
@@ -141,7 +281,7 @@ DEBUG=False
 
 **Guardar**: `Ctrl + O`, `Enter`, `Ctrl + X` (en nano)
 
-### 3.5 Verificar Configuración
+### 4.5 Verificar Configuración
 
 ```bash
 # Verificar que el archivo existe y tiene contenido
@@ -150,7 +290,7 @@ cat .env
 # Deberías ver tu API key
 ```
 
-### 3.6 Levantar el Servidor
+### 4.6 Levantar el Servidor
 
 ```bash
 # Iniciar servidor en modo desarrollo (con auto-reload)
@@ -169,7 +309,7 @@ INFO:     Application startup complete.
 
 **🔴 Si ves error**: Ver sección [Troubleshooting](#troubleshooting)
 
-### 3.7 Verificar que el Backend Está Corriendo
+### 4.7 Verificar que el Backend Está Corriendo
 
 **Abrir en navegador**:
 ```
@@ -184,7 +324,7 @@ http://localhost:8001
 }
 ```
 
-### 3.8 Acceder a la Documentación Interactiva
+### 4.8 Acceder a la Documentación Interactiva
 
 **Swagger UI**:
 ```
@@ -302,7 +442,7 @@ curl -X POST "http://localhost:8001/api/generar-ejercicios" \
 
 ---
 
-## 5. Testing Frontend (Next.js)
+## 5. Testing Frontend de Ejercicios (Next.js)
 
 ### 5.1 Nueva Terminal
 
@@ -373,43 +513,101 @@ http://localhost:3001
 
 ---
 
-## 6. Testing End-to-End
+## 6. Testing End-to-End - Flujo Completo (4 Servidores)
 
-### 6.1 Verificar que Ambos Servidores Están Corriendo
+### 6.1 Verificar que TODOS los Servidores Están Corriendo
 
-**Terminal 1** (Backend):
+**⚠️ IMPORTANTE**: Para el flujo completo necesitas **4 terminales**:
+
+**Terminal 1** - Backend Clasificación (puerto 8000):
+```
+INFO:     Uvicorn running on http://0.0.0.0:8000
+```
+
+**Terminal 2** - Frontend Clasificación (puerto 3000):
+```
+- Local:        http://localhost:3000
+✓ Ready in 2s
+```
+
+**Terminal 3** - Backend Generador (puerto 8001):
 ```
 INFO:     Uvicorn running on http://0.0.0.0:8001
 ```
 
-**Terminal 2** (Frontend):
+**Terminal 4** - Frontend Ejercicios (puerto 3001):
 ```
 - Local:        http://localhost:3001
-✓ Ready in 3.1s
+✓ Ready in 3s
 ```
 
-### 6.2 Flujo Completo: Generar Ejercicios
+### 6.2 Flujo Completo: De Clasificación a Ejercicios
 
-#### Paso 1: Configurar Sesión
+---
 
-1. **Abrir**: http://localhost:3001
+#### 🎯 FASE 1: Clasificar Estudiante
 
-2. **Rellenar formulario**:
-   - ID Estudiante: `EST001`
-   - Curso: `Matemáticas`
-   - Cantidad: `5 ejercicios`
+**1. Abrir Sistema de Clasificación**:
+```
+http://localhost:3000
+```
 
-3. **Click**: "Comenzar Ejercicios"
+**2. Rellenar Datos Básicos**:
+- Nombre: `Juan Pérez`
+- Grado: `3-4 primaria`
+- Edad: `9 años`
 
-4. **Verificar**:
-   - ⏳ Aparece mensaje "Generando ejercicios personalizados..."
-   - ⏱️ Espera 5-10 segundos
+**3. Responder Cuestionario de Matemáticas** (4 preguntas):
+- Pregunta 1: Responder opción correcta
+- Pregunta 2: Responder opción correcta
+- Pregunta 3: Responder opción (puede ser incorrecta)
+- Pregunta 4: Responder opción correcta
 
-#### Paso 2: Ver Ejercicios Generados
+**4. Responder Cuestionario Verbal** (4 preguntas):
+- Pregunta 1: Responder opción correcta
+- Pregunta 2: Responder opción (puede ser incorrecta)
+- Pregunta 3: Responder opción correcta
+- Pregunta 4: Responder opción correcta
+
+**5. Ver Resultado de Clasificación**:
+```
+✅ Perfil del Estudiante:
+   - Nivel Matemáticas: intermedio
+   - Nivel Verbal: básico
+   - Estilo de Aprendizaje: visual
+   - Velocidad: moderada
+   - ID Estudiante: EST001 (generado automáticamente)
+```
+
+**6. IMPORTANTE - Copiar ID del Estudiante**: `EST001`
+
+---
+
+#### 🎯 FASE 2: Generar Ejercicios Personalizados
+
+**1. Abrir Generador de Ejercicios**:
+```
+http://localhost:3001
+```
+
+**2. Configurar Sesión**:
+   - **ID Estudiante**: `EST001` (el que obtuviste en FASE 1)
+   - **Curso**: `Matemáticas`
+   - **Cantidad**: `5 ejercicios`
+
+**3. Click**: "Comenzar Ejercicios"
+
+**4. Verificar Generación**:
+   - ⏳ Aparece "Generando ejercicios personalizados..."
+   - 🎯 El sistema consulta el perfil de EST001 del backend de clasificación
+   - 🤖 Gemini AI genera ejercicios adaptados al perfil del estudiante
+   - ⏱️ Espera 5-10 segundos (Gemini AI procesando)
+
+**5. Ver Ejercicios Generados**:
 
 **Deberías ver**:
 - ✅ Ejercicio 1 de 5 mostrado
-- ✅ Enunciado del ejercicio
+- ✅ Enunciado del ejercicio personalizado según perfil de EST001
 - ✅ 4 opciones (A, B, C, D)
 - ✅ Barra de progreso (1/5)
 - ✅ Tiempo transcurrido contando
@@ -420,14 +618,14 @@ INFO:     Uvicorn running on http://0.0.0.0:8001
 ✅ Sesión creada: SES_20251117_EST001_001
 ```
 
-#### Paso 3: Responder Ejercicios
+**6. Responder Ejercicios**:
 
 1. **Seleccionar una opción** (ej: A)
 
 2. **Verificar feedback**:
    - ✅ Opción correcta: Fondo verde + "¡Correcto!"
    - ❌ Opción incorrecta: Fondo rojo + "Incorrecto"
-   - ✅ Muestra explicación
+   - ✅ Muestra explicación detallada
 
 3. **Click "Siguiente"**
 
@@ -436,9 +634,10 @@ INFO:     Uvicorn running on http://0.0.0.0:8001
 **Verificar en consola**:
 ```javascript
 ✅ Respuesta registrada en backend
+✅ POST /api/sesiones/SES_20251117_EST001_001/responder
 ```
 
-#### Paso 4: Ver Resultados Finales
+**7. Ver Resultados Finales**:
 
 **Después del ejercicio 5**:
 - ✅ Pantalla de resultados
@@ -449,31 +648,44 @@ INFO:     Uvicorn running on http://0.0.0.0:8001
 
 **Verificar en consola**:
 ```javascript
-✅ Sesión completada: { total_ejercicios: 5, ... }
+✅ Sesión completada: {
+  total_ejercicios: 5,
+  ejercicios_correctos: X,
+  tasa_aciertos: 0.X,
+  recomendacion_nivel: { ... }  // Sistema adaptativo
+}
 ```
 
-**⚠️ NOTA**: La recomendación de nivel NO se muestra en UI (pendiente de implementar)
+**⚠️ NOTA**: La recomendación de nivel NO se muestra en UI (pendiente de implementar, pero está en el response)
 
-### 6.3 Verificar Tracking en el Backend
+---
 
-#### Ver Sesión Guardada
+#### 🎯 FASE 3: Verificar Sistema de Tracking y Adaptativo
 
-**Terminal del backend** (donde corre uvicorn), ver logs:
+**1. Ver Logs del Backend Generador**:
+
+**Terminal 3** (donde corre el backend generador en puerto 8001), ver logs:
 ```
 INFO:     127.0.0.1:XXXXX - "POST /api/sesiones/crear HTTP/1.1" 200 OK
 INFO:     127.0.0.1:XXXXX - "POST /api/sesiones/SES_20251117_EST001_001/responder HTTP/1.1" 200 OK
-...
+INFO:     127.0.0.1:XXXXX - "POST /api/sesiones/SES_20251117_EST001_001/responder HTTP/1.1" 200 OK
+... (5 veces, una por cada ejercicio)
 INFO:     127.0.0.1:XXXXX - "POST /api/sesiones/SES_20251117_EST001_001/completar HTTP/1.1" 200 OK
 ```
 
-#### Ver Archivo JSON
+**✅ Si ves estos logs**: El tracking está funcionando correctamente
 
+**2. Ver Archivo JSON de Sesiones Guardadas**:
+
+Abrir **Terminal 5** (nueva):
 ```bash
-# En otra terminal o Ctrl+C en backend
-cat generador-ejercicios/data/sesiones.json | jq .
+cd /home/user/test111/generador-ejercicios
 
-# O sin jq:
-cat generador-ejercicios/data/sesiones.json
+# Ver sesiones guardadas (con formato bonito)
+cat data/sesiones.json | jq .
+
+# Si no tienes jq instalado:
+cat data/sesiones.json
 ```
 
 **Deberías ver**:
@@ -494,61 +706,121 @@ cat generador-ejercicios/data/sesiones.json
           "tiempo_respuesta_segundos": 15,
           "timestamp": "2025-11-17T..."
         },
-        // ... 4 respuestas más
+        {
+          "ejercicio_id": "MAT_BAS_002",
+          "opcion_seleccionada": "B",
+          "es_correcta": true,
+          "tiempo_respuesta_segundos": 20,
+          "timestamp": "2025-11-17T..."
+        }
+        // ... 3 respuestas más
       ],
       "estado": "completada",
-      "fecha_inicio": "2025-11-17T...",
-      "fecha_fin": "2025-11-17T..."
+      "fecha_inicio": "2025-11-17T10:30:00",
+      "fecha_fin": "2025-11-17T10:32:30"
     }
   ]
 }
 ```
 
-### 6.4 Testing del Sistema Adaptativo
+**✅ Verificaciones**:
+- ✅ `sesion_id` tiene formato correcto: `SES_YYYYMMDD_ESTXXX_###`
+- ✅ `estudiante_id` es el mismo de FASE 1: `EST001`
+- ✅ `respuestas` tiene 5 elementos (una por cada ejercicio)
+- ✅ Cada respuesta tiene `tiempo_respuesta_segundos`
+- ✅ `estado` es `completada`
+- ✅ Tiene `fecha_inicio` y `fecha_fin`
 
-#### Ver Recomendación en Response
+**3. Verificar Sistema Adaptativo (Recomendación de Nivel)**:
 
-**Método 1: Consola del Navegador**
+El sistema adaptativo analiza automáticamente el rendimiento del estudiante y recomienda el nivel apropiado para la próxima sesión.
 
-Al completar sesión, en la consola deberías ver:
+**Método 1: Ver en Consola del Navegador (F12)**
+
+Al completar la sesión en http://localhost:3001, en la consola deberías ver:
 ```javascript
 ✅ Sesión completada: {
-  estadisticas: { ... },
+  estadisticas: {
+    total_ejercicios: 5,
+    ejercicios_correctos: 4,
+    tasa_aciertos: 0.8
+  },
   recomendacion_nivel: {
     nivel_actual: "basico",
-    nivel_recomendado: "intermedio",  // Depende de tu rendimiento
+    nivel_recomendado: "intermedio",  // Varía según rendimiento
     direccion: "subir",
     razon: "Excelente tasa de aciertos (80%). Nivel actual fácil.",
-    confianza: "alta"
+    confianza: "alta",
+    cambio_aplicado: true
   }
 }
 ```
 
+**Interpretación**:
+- `direccion: "subir"` → Rendimiento alto, nivel muy fácil
+- `direccion: "mantener"` → Rendimiento adecuado, nivel apropiado
+- `direccion: "bajar"` → Rendimiento bajo, nivel muy difícil
+
 **Método 2: Llamar Endpoint Directamente**
 
+En **Terminal 5**:
 ```bash
+# Obtener recomendación de nivel para EST001
 curl "http://localhost:8001/api/estudiantes/EST001/nivel-recomendado?curso=matematicas"
 ```
 
-**Response**:
+**Response esperado**:
 ```json
 {
   "nivel_actual": "basico",
   "nivel_recomendado": "intermedio",
   "direccion": "subir",
-  "razon": "Excelente tasa de aciertos (85%) en últimas sesiones.",
+  "razon": "Excelente tasa de aciertos (80%) en últimas sesiones. Tiempo promedio rápido.",
   "confianza": "alta",
   "cambio_aplicado": true,
   "metricas": {
-    "tasa_aciertos_historica": 0.85,
-    "total_ejercicios": 5
+    "tasa_aciertos_historica": 0.8,
+    "total_ejercicios": 5,
+    "tiempo_promedio_segundos": 20
   }
 }
 ```
 
-#### Casos de Prueba del Adaptador
+**✅ Verificaciones del Sistema Adaptativo**:
+- ✅ La recomendación aparece en el response de completar sesión
+- ✅ El endpoint `/nivel-recomendado` funciona
+- ✅ La dirección (`subir`/`mantener`/`bajar`) es lógica según el rendimiento
+- ✅ La `razon` explica claramente por qué se recomienda ese nivel
+- ✅ La `confianza` es `alta` con 5+ ejercicios
 
-**Test Case 1: Rendimiento Bajo → Bajar Nivel**
+**⚠️ NOTA IMPORTANTE**:
+- El sistema adaptativo **FUNCIONA** correctamente en el backend
+- La recomendación **ESTÁ** en el response JSON
+- **PERO** la UI del frontend **NO MUESTRA** la recomendación al estudiante (pendiente de implementar)
+- Ver issue #3 en `docs/TODO.md`
+
+---
+
+### 6.3 Resumen del Flujo Completo
+
+**Flujo End-to-End Exitoso**:
+
+1. ✅ **Clasificación**: Estudiante completa cuestionario → Obtiene perfil + ID (EST001)
+2. ✅ **Generación**: Sistema consulta perfil → Gemini AI personaliza ejercicios
+3. ✅ **Tracking**: Cada respuesta se guarda → Sesión completa en JSON
+4. ✅ **Adaptativo**: Sistema analiza rendimiento → Recomienda nivel para próxima sesión
+
+**4 Servidores Necesarios**:
+- ✅ Backend Clasificación (puerto 8000)
+- ✅ Frontend Clasificación (puerto 3000)
+- ✅ Backend Generador (puerto 8001)
+- ✅ Frontend Ejercicios (puerto 3001)
+
+---
+
+### 6.4 Testing del Sistema Adaptativo - Casos de Prueba
+
+#### Test Case 1: Rendimiento Bajo → Bajar Nivel
 
 1. **Generar sesión**: Nivel intermedio, 10 ejercicios
 2. **Responder mal**: Solo 2-3 correctos (20-30%)
@@ -980,41 +1252,54 @@ python test_e2e.py
 
 ## 10. Resumen Ejecutivo
 
-### Comandos Rápidos
+### Comandos Rápidos - Levantar Todos los Servicios
 
-**Levantar Backend**:
+**⚠️ IMPORTANTE**: Para el flujo completo necesitas **4 terminales** corriendo simultáneamente:
+
+**Terminal 1 - Backend Clasificación**:
+```bash
+cd /home/user/test111/backend
+source venv/bin/activate
+python -m uvicorn main:app --reload --host 0.0.0.0 --port 8000
+```
+
+**Terminal 2 - Frontend Clasificación** (nueva terminal):
+```bash
+cd /home/user/test111/frontend/sistema-categorizacion
+npm run dev
+```
+
+**Terminal 3 - Backend Generador** (nueva terminal):
 ```bash
 cd /home/user/test111/generador-ejercicios
 source venv/bin/activate
 python -m uvicorn main:app --reload --port 8001
 ```
 
-**Levantar Frontend** (nueva terminal):
+**Terminal 4 - Frontend Ejercicios** (nueva terminal):
 ```bash
 cd /home/user/test111/frontend/ejercicios-app
 npm run dev
 ```
 
-**Verificar**:
-- Backend: http://localhost:8001/docs
-- Frontend: http://localhost:3001
-
 ### URLs Importantes
 
 | Servicio | URL | Propósito |
 |----------|-----|-----------|
-| Backend API | http://localhost:8001 | API REST |
-| Swagger Docs | http://localhost:8001/docs | Testing interactivo |
-| Frontend App | http://localhost:3001 | Aplicación web |
+| Backend Clasificación | http://localhost:8000 | API de clasificación de perfiles |
+| Swagger Clasificación | http://localhost:8000/docs | Documentación interactiva |
+| Frontend Clasificación | http://localhost:3000 | Cuestionarios de clasificación |
+| Backend Generador | http://localhost:8001 | API de generación de ejercicios |
+| Swagger Generador | http://localhost:8001/docs | Testing interactivo Gemini AI |
+| Frontend Ejercicios | http://localhost:3001 | Aplicación de ejercicios |
 
-### Flujo de Testing Básico
+### Flujo de Testing Completo
 
-1. ✅ Levantar backend → verificar en /docs
-2. ✅ Testear Gemini → generar 3 ejercicios
-3. ✅ Levantar frontend → verificar UI carga
-4. ✅ Flujo E2E → generar, responder, completar
-5. ✅ Verificar JSON → ver sesiones guardadas
-6. ✅ Testear adaptador → verificar recomendaciones
+1. ✅ **Clasificación**: Levantar backend (8000) + frontend (3000) → Clasificar estudiante → Obtener EST001
+2. ✅ **Generador**: Levantar backend (8001) + frontend (3001) → Verificar Gemini en /docs
+3. ✅ **Flujo E2E**: Usar EST001 → Generar ejercicios → Responder → Completar
+4. ✅ **Tracking**: Verificar JSON → Ver sesiones guardadas en data/sesiones.json
+5. ✅ **Adaptativo**: Ver recomendación en consola → Testear endpoint /nivel-recomendado
 
 ---
 
