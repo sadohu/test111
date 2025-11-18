@@ -22,10 +22,11 @@
 4. [Testing Backend Generador de Ejercicios](#testing-backend-generador-de-ejercicios-fastapi)
 5. [Testing Gemini AI](#testing-gemini-ai)
 6. [Testing Frontend Ejercicios](#testing-frontend-nextjs)
-7. [Testing End-to-End - Flujo Completo](#testing-end-to-end)
+7. [Testing End-to-End - Flujo Completo](#testing-end-to-end-flujo-completo-4-servidores)
 8. [Troubleshooting](#troubleshooting)
 9. [Checklist de Verificación](#checklist-de-verificación)
 10. [Resumen Ejecutivo](#resumen-ejecutivo)
+11. [Guía Rápida para Windows](#guía-rápida-para-windows) 🪟
 
 ---
 
@@ -33,6 +34,7 @@
 
 ### Software Necesario
 
+**En Linux/Mac/Git Bash**:
 ```bash
 # Verificar versiones instaladas
 python --version    # Debe ser >= 3.11
@@ -40,9 +42,24 @@ node --version      # Debe ser >= 18.x
 npm --version       # Debe ser >= 9.x
 ```
 
+**En Windows (PowerShell)**:
+```powershell
+# Verificar versiones instaladas
+python --version    # Debe ser >= 3.11
+node --version      # Debe ser >= 18.x
+npm --version       # Debe ser >= 9.x
+
+# Si python no funciona, prueba:
+py --version
+py -3.11 --version  # Si tienes Python 3.11 instalado
+```
+
 **Si no están instalados**:
-- Python 3.11+: https://www.python.org/downloads/
-- Node.js 18+: https://nodejs.org/
+- **Python 3.11+**:
+  - Windows: Descargar desde https://www.python.org/downloads/ o usar Microsoft Store
+  - Asegúrate de marcar "Add Python to PATH" durante la instalación
+- **Node.js 18+**: https://nodejs.org/ (Descarga el instalador LTS para Windows)
+- **Git para Windows** (opcional pero recomendado): https://git-scm.com/download/win
 
 ### API Key de Google Gemini
 
@@ -61,12 +78,26 @@ npm --version       # Debe ser >= 9.x
 
 ## 2. Setup Inicial
 
-### 2.1 Clonar el Repositorio (si no lo tienes)
+### 2.1 Ubicación del Proyecto
 
+**En Linux/Mac**:
 ```bash
-# Ya deberías tener el código en:
 cd /home/user/test111
 ```
+
+**En Windows**:
+```powershell
+# Navegar a tu directorio de trabajo
+cd "E:\Files\Cheems Heaven\innova-edu-ai_backend\test111"
+
+# Verificar que estás en el directorio correcto
+ls  # Deberías ver: categorizacion, sistema-ejercicio, docs
+```
+
+**⚠️ IMPORTANTE para Windows**:
+- Si tu ruta tiene espacios, usa comillas: `cd "C:\Mi Carpeta\test111"`
+- Usa `\` (backslash) en lugar de `/` (forward slash)
+- PowerShell es más moderno que CMD, recomendado usar PowerShell
 
 ### 2.2 Estructura del Proyecto
 
@@ -129,8 +160,29 @@ python -m uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 
 **En Windows (PowerShell)**:
 ```powershell
-cd E:\Files\Cheems Heaven\innova-edu-ai_backend\test111\categorizacion\backend
+# Navegar al backend de clasificación
+cd "E:\Files\Cheems Heaven\innova-edu-ai_backend\test111\categorizacion\backend"
+
+# SI NO TIENES VENV CREADO (primera vez):
+python -m venv venv
+# o si python no funciona:
+py -3.11 -m venv venv
+
+# Activar entorno virtual
 venv\Scripts\activate
+# Deberías ver (venv) al inicio de la línea
+
+# Crear archivo .env si no existe
+if (!(Test-Path .env)) { Copy-Item .env.example .env }
+# O manualmente:
+# copy .env.example .env
+
+# Editar .env (usa tu editor preferido):
+# notepad .env
+# O usa VSCode: code .env
+
+# Instalar dependencias (si no están instaladas)
+pip install -r requirements.txt
 
 # OPCIÓN 1: Usar script run.py (recomendado)
 python run.py
@@ -139,13 +191,22 @@ python run.py
 python -m uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 ```
 
-**⚠️ IMPORTANTE**:
+**⚠️ IMPORTANTE para Windows**:
 - El comando es `app.main:app` (NO `main:app`)
 - El script `run.py` configura todo automáticamente
+- Si ves error de permisos al activar venv, ejecuta en PowerShell como Admin:
+  ```powershell
+  Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+  ```
 
 **✅ Verificar**:
 - Abrir: http://localhost:8000/docs
 - Deberías ver Swagger UI con endpoints de clasificación
+
+**🔴 Errores Comunes en Windows**:
+1. **"python no se reconoce"**: Usa `py` en lugar de `python`
+2. **Error de CORS_ORIGINS**: Ya está solucionado, solo crea el .env desde .env.example
+3. **Firewall de Windows**: Permite acceso a Python cuando Windows pregunte
 
 ### 3.2 Levantar Frontend de Clasificación
 
@@ -166,16 +227,43 @@ cat .env.local
 npm run dev
 ```
 
-**En Windows (PowerShell)**:
+**En Windows (PowerShell)** - NUEVA TERMINAL (no cierres la del backend):
 ```powershell
-cd E:\Files\Cheems Heaven\innova-edu-ai_backend\test111\categorizacion\frontend
+# Abrir NUEVA ventana de PowerShell
+# Navegar al frontend de clasificación
+cd "E:\Files\Cheems Heaven\innova-edu-ai_backend\test111\categorizacion\frontend"
+
+# Crear archivo .env.local si no existe
+if (!(Test-Path .env.local)) { Copy-Item .env.example .env.local }
+# O manualmente:
+# copy .env.example .env.local
+
+# Editar .env.local para verificar la URL del backend:
+# notepad .env.local
+# Debe contener: NEXT_PUBLIC_API_URL=http://localhost:8000
+
+# Instalar dependencias Node.js (primera vez)
 npm install
+
+# Levantar servidor de desarrollo
 npm run dev
 ```
+
+**⚠️ IMPORTANTE para Windows**:
+- Debes tener 2 ventanas de PowerShell abiertas simultáneamente:
+  1. Backend (puerto 8000) - no cerrar
+  2. Frontend (puerto 3000) - esta nueva
+- Si npm es lento, es normal en la primera instalación
 
 **✅ Verificar**:
 - Abrir: http://localhost:3000
 - Deberías ver formulario de clasificación
+- Si no carga, verifica que el backend sigue corriendo en la otra terminal
+
+**🔴 Errores Comunes en Windows**:
+1. **Puerto 3000 ocupado**: Cierra otras apps que usen ese puerto o cambia en package.json
+2. **Error de ENOENT**: Asegúrate de estar en el directorio correcto
+3. **npm no se reconoce**: Reinstala Node.js y marca "Add to PATH"
 
 ### 3.3 Test: Clasificar un Estudiante
 
@@ -237,18 +325,30 @@ cd /home/user/test111/sistema-ejercicio/backend
 
 ### 4.2 Crear Entorno Virtual (Recomendado)
 
+**En Linux/Mac**:
 ```bash
 # Crear entorno virtual
 python -m venv venv
 
 # Activar entorno virtual
-# En Linux/Mac:
 source venv/bin/activate
 
-# En Windows:
+# Deberías ver (venv) al inicio de tu terminal
+```
+
+**En Windows (PowerShell)**:
+```powershell
+# SI NO TIENES VENV CREADO:
+python -m venv venv
+# O si python no funciona:
+py -3.11 -m venv venv
+
+# Activar entorno virtual
 venv\Scripts\activate
 
-# Deberías ver (venv) al inicio de tu terminal
+# Deberías ver (venv) al inicio de la línea
+# Si da error de permisos, ejecuta como Admin:
+# Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 ```
 
 ### 4.3 Instalar Dependencias
@@ -262,8 +362,11 @@ pip install -r requirements.txt
 Successfully installed fastapi-0.104.1 uvicorn-0.24.0 pydantic-2.5.0 ...
 ```
 
+**⚠️ En Windows**: Si falla la instalación de algún paquete, asegúrate de tener Python 3.11 (NO 3.14) y Visual C++ Build Tools instalados.
+
 ### 4.4 Configurar Variables de Entorno
 
+**En Linux/Mac**:
 ```bash
 # Copiar archivo de ejemplo
 cp .env.example .env
@@ -275,7 +378,29 @@ nano .env
 # vim .env
 ```
 
-**Agregar tu API Key**:
+**En Windows (PowerShell)**:
+```powershell
+# Copiar archivo de ejemplo
+copy .env.example .env
+
+# Editar archivo .env con Notepad
+notepad .env
+
+# O con VSCode (si lo tienes instalado):
+code .env
+
+# O con cualquier editor de texto
+```
+
+**⚠️ IMPORTANTE - Agregar tu API Key de Gemini**:
+
+1. **Obtener API Key** (si no la tienes):
+   - Ve a: https://makersuite.google.com/app/apikey
+   - Inicia sesión con tu cuenta Google
+   - Click en "Create API Key"
+   - Copia la key (empieza con `AIza...`)
+
+2. **Editar el archivo .env**:
 ```env
 # ============================================================================
 # GENERADOR DE EJERCICIOS - VARIABLES DE ENTORNO
@@ -283,7 +408,7 @@ nano .env
 
 # Google Gemini AI API Key
 # Obtén tu API key en: https://makersuite.google.com/app/apikey
-GEMINI_API_KEY=AIzaSy...tu_api_key_aqui_completa
+GEMINI_API_KEY=AIzaSyXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX  # ← PEGA TU KEY AQUÍ
 
 # Configuración de la aplicación
 APP_NAME="Generador de Ejercicios con Gemini"
@@ -291,7 +416,15 @@ APP_VERSION="1.0.0"
 DEBUG=False
 ```
 
-**Guardar**: `Ctrl + O`, `Enter`, `Ctrl + X` (en nano)
+3. **Guardar el archivo**:
+   - **Notepad**: Archivo → Guardar
+   - **VSCode**: Ctrl + S
+   - **Nano**: `Ctrl + O`, `Enter`, `Ctrl + X`
+
+**🔴 ERROR SI NO CONFIGURAS LA API KEY**: El backend no iniciará y verás:
+```
+ValueError: ❌ GEMINI_API_KEY no encontrada en .env
+```
 
 ### 4.5 Verificar Configuración
 
@@ -1318,6 +1451,155 @@ npm run dev
 
 ---
 
+---
+
+## 11. Guía Rápida para Windows
+
+### 📋 Checklist Setup Completo en Windows
+
+**Pre-requisitos**:
+- [ ] Python 3.11 instalado (verificar: `python --version` o `py --version`)
+- [ ] Node.js 18+ instalado (verificar: `node --version`)
+- [ ] Git para Windows instalado (opcional)
+- [ ] API Key de Gemini obtenida
+
+**Sistema de Clasificación**:
+- [ ] Navegado a: `E:\Files\...\test111\categorizacion\backend`
+- [ ] Creado venv: `python -m venv venv`
+- [ ] Activado venv: `venv\Scripts\activate`
+- [ ] Creado .env: `copy .env.example .env`
+- [ ] Instalado deps: `pip install -r requirements.txt`
+- [ ] Backend corriendo en puerto 8000
+- [ ] Frontend corriendo en puerto 3000
+
+**Sistema de Ejercicios**:
+- [ ] Navegado a: `E:\Files\...\test111\sistema-ejercicio\backend`
+- [ ] Creado venv: `python -m venv venv`
+- [ ] Activado venv: `venv\Scripts\activate`
+- [ ] Creado .env: `copy .env.example .env`
+- [ ] Agregado GEMINI_API_KEY en .env
+- [ ] Instalado deps: `pip install -r requirements.txt`
+- [ ] Backend corriendo en puerto 8001
+- [ ] Frontend corriendo en puerto 3001
+
+### 🚀 Script de Inicio Rápido (PowerShell)
+
+Crea un archivo `start-all.ps1` en la raíz del proyecto:
+
+```powershell
+# start-all.ps1 - Inicia todos los servidores
+
+$base = "E:\Files\Cheems Heaven\innova-edu-ai_backend\test111"
+
+# Función para abrir nueva ventana de PowerShell
+function Start-Service {
+    param($Path, $Command)
+    Start-Process powershell -ArgumentList "-NoExit", "-Command", "cd '$Path'; $Command"
+}
+
+Write-Host "🚀 Iniciando todos los servicios..." -ForegroundColor Green
+
+# Backend Clasificación
+Start-Service "$base\categorizacion\backend" "venv\Scripts\activate; python run.py"
+Start-Sleep 3
+
+# Frontend Clasificación
+Start-Service "$base\categorizacion\frontend" "npm run dev"
+Start-Sleep 3
+
+# Backend Ejercicios
+Start-Service "$base\sistema-ejercicio\backend" "venv\Scripts\activate; python run.py"
+Start-Sleep 3
+
+# Frontend Ejercicios
+Start-Service "$base\sistema-ejercicio\frontend" "npm run dev"
+
+Write-Host "✅ Todos los servicios iniciados!" -ForegroundColor Green
+Write-Host "📚 URLs:" -ForegroundColor Cyan
+Write-Host "  - Clasificación: http://localhost:3000" -ForegroundColor White
+Write-Host "  - Ejercicios: http://localhost:3001" -ForegroundColor White
+Write-Host "  - API Clasificación: http://localhost:8000/docs" -ForegroundColor White
+Write-Host "  - API Ejercicios: http://localhost:8001/docs" -ForegroundColor White
+```
+
+**Ejecutar**:
+```powershell
+.\start-all.ps1
+```
+
+### 🔧 Troubleshooting Específico Windows
+
+#### Error: "Execution Policy"
+```powershell
+# Solución (ejecutar PowerShell como Administrador):
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+```
+
+#### Error: "python no se reconoce"
+```powershell
+# Opción 1: Usa py en lugar de python
+py -3.11 -m venv venv
+
+# Opción 2: Agrega Python al PATH
+# 1. Busca "Variables de entorno" en Windows
+# 2. Edita "Path" en Variables del sistema
+# 3. Agrega: C:\Users\TuUsuario\AppData\Local\Programs\Python\Python311
+```
+
+#### Error: "ModuleNotFoundError"
+```powershell
+# Verifica que estés en el venv activado
+# Deberías ver (venv) al inicio de la línea
+venv\Scripts\activate
+
+# Reinstala dependencias
+pip install -r requirements.txt
+```
+
+#### Error: Puerto ocupado
+```powershell
+# Ver qué proceso usa el puerto 8000
+netstat -ano | findstr :8000
+
+# Matar el proceso (reemplaza PID con el número que viste)
+taskkill /PID XXXX /F
+```
+
+#### Error: Firewall de Windows
+- Windows preguntará si permites Python/Node acceder a la red
+- **Selecciona "Permitir acceso"** para ambos (público y privado)
+
+### 📝 Comandos Útiles Windows
+
+```powershell
+# Ver archivos en directorio actual
+ls
+
+# Cambiar de directorio
+cd ruta\al\directorio
+
+# Volver al directorio anterior
+cd ..
+
+# Ver contenido de archivo
+type archivo.txt
+
+# Buscar texto en archivo
+Select-String -Path archivo.txt -Pattern "texto"
+
+# Limpiar consola
+cls
+
+# Ver procesos corriendo
+Get-Process python
+Get-Process node
+
+# Ver puertos en uso
+netstat -ano | findstr :8000
+```
+
+---
+
 **Creado**: 17 de Noviembre, 2025
-**Última actualización**: 17 de Noviembre, 2025
-**Versión**: 1.0.0
+**Última actualización**: 18 de Noviembre, 2025
+**Versión**: 2.0.0 (Actualizado con guía Windows completa)
