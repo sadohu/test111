@@ -15,7 +15,7 @@ Fecha: 17 de Noviembre, 2025
 from typing import Dict, List, Optional, Tuple
 from enum import Enum
 
-from ..models.respuesta import (
+from models.respuesta import (
     SesionEjercicios,
     EstadisticasSesion,
     EstadisticasEstudiante,

@@ -13,7 +13,7 @@ from pathlib import Path
 from typing import List, Optional, Dict
 from datetime import datetime
 
-from ..models.respuesta import (
+from models.respuesta import (
     SesionEjercicios,
     RespuestaEstudiante,
     EstadisticasSesion,
@@ -415,7 +415,7 @@ if __name__ == "__main__":
     print("=" * 70)
 
     # Crear sesión de prueba
-    from ..models.respuesta import SesionEjercicios, RespuestaEstudiante, CursoEnum
+    from models.respuesta import SesionEjercicios, RespuestaEstudiante, CursoEnum
 
     sesion_id = respuestas_storage.generar_id_sesion("TEST001")
     print(f"\n✓ ID generado: {sesion_id}")

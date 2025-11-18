@@ -1,5 +1,5 @@
 """
-GeneradorVerbal - Servicio para generar ejercicios de razonamiento verbal personalizados
+GeneradorMatematicas - Servicio para generar ejercicios de matemáticas personalizados
 Integra: PerfilAdapter + PromptBuilder + GeminiClient
 """
 
@@ -11,17 +11,17 @@ from datetime import datetime
 from .gemini_client import gemini_client
 from .perfil_adapter import perfil_adapter
 from .prompt_builder import prompt_builder
-from models.ejercicio import (
-    EjercicioVerbal,
+from ..models.ejercicio import (
+    EjercicioMatematicas,
     NivelDificultad,
-    TipoEjercicioVerbal,
+    TipoEjercicioMatematicas,
     CursoEnum
 )
 
 
-class GeneradorVerbal:
+class GeneradorMatematicas:
     """
-    Generador de ejercicios de razonamiento verbal personalizados usando Gemini AI
+    Generador de ejercicios de matemáticas personalizados usando Gemini AI
     """
 
     def __init__(
@@ -31,7 +31,7 @@ class GeneradorVerbal:
         reintentos_max: int = 3
     ):
         """
-        Inicializa el generador verbal
+        Inicializa el generador de matemáticas
 
         Args:
             temperatura: Creatividad de Gemini (0.0-1.0)
@@ -50,12 +50,12 @@ class GeneradorVerbal:
         forzar_nivel: Optional[NivelDificultad] = None
     ) -> Dict:
         """
-        Genera ejercicios de razonamiento verbal personalizados para un estudiante
+        Genera ejercicios de matemáticas personalizados para un estudiante
 
         Args:
             estudiante_id: ID del estudiante
             cantidad: Cantidad de ejercicios a generar (1-20)
-            tipo_especifico: Tipo de ejercicio específico (sinonimos, antonimos, etc.)
+            tipo_especifico: Tipo de ejercicio específico (suma, resta, etc.)
             forzar_nivel: Forzar nivel de dificultad (ignora perfil)
 
         Returns:
@@ -84,7 +84,7 @@ class GeneradorVerbal:
             nivel = self._nivel_dificultad_a_string(forzar_nivel)
             print(f"🎯 Nivel forzado: {nivel}")
         else:
-            nivel = prompt_builder.determinar_nivel_desde_perfil(perfil, "verbal")
+            nivel = prompt_builder.determinar_nivel_desde_perfil(perfil, "matematicas")
             print(f"🎯 Nivel determinado del perfil: {nivel}")
 
         # Determinar tipo de ejercicio
@@ -93,7 +93,7 @@ class GeneradorVerbal:
 
         # Construir prompt personalizado
         print(f"🔨 Construyendo prompt personalizado...")
-        prompt = prompt_builder.construir_prompt_verbal(
+        prompt = prompt_builder.construir_prompt_matematicas(
             nivel=nivel,
             cantidad=cantidad,
             tipo_ejercicio=tipo_ejercicio,
@@ -149,11 +149,11 @@ class GeneradorVerbal:
             "success": True,
             "mensaje": f"{len(ejercicios)} ejercicios generados exitosamente",
             "estudiante_id": estudiante_id,
-            "curso": CursoEnum.VERBAL.value,
+            "curso": CursoEnum.MATEMATICAS.value,
             "cantidad_solicitada": cantidad,
             "cantidad_generada": len(ejercicios),
-            "ejercicios_matematicas": None,
-            "ejercicios_verbales": ejercicios,
+            "ejercicios_matematicas": ejercicios,
+            "ejercicios_verbales": None,
             "perfil_usado": self._preparar_perfil_respuesta(perfil),
             "nivel_determinado": nivel,
             "tiempo_generacion_segundos": round(tiempo_generacion, 2)
@@ -202,7 +202,7 @@ class GeneradorVerbal:
         ejercicios_data: List[Dict],
         nivel: str,
         tipo_ejercicio: str
-    ) -> List[EjercicioVerbal]:
+    ) -> List[EjercicioMatematicas]:
         """
         Valida y convierte ejercicios a objetos Pydantic
 
@@ -212,14 +212,14 @@ class GeneradorVerbal:
             tipo_ejercicio: Tipo de ejercicio esperado
 
         Returns:
-            Lista de objetos EjercicioVerbal validados
+            Lista de objetos EjercicioMatematicas validados
         """
         ejercicios_validados = []
 
         for i, ejercicio_dict in enumerate(ejercicios_data, 1):
             try:
                 # Intentar crear objeto Pydantic (valida automáticamente)
-                ejercicio = EjercicioVerbal(**ejercicio_dict)
+                ejercicio = EjercicioMatematicas(**ejercicio_dict)
                 ejercicios_validados.append(ejercicio)
 
             except Exception as e:
@@ -256,13 +256,13 @@ class GeneradorVerbal:
             Tipo de ejercicio apropiado
         """
         tipos_por_nivel = {
-            "basico": ["sinonimos", "antonimos", "categorias", "completar"],
-            "intermedio": ["analogias", "termino_excluido", "comprension", "oraciones_incompletas"],
-            "avanzado": ["comprension_inferencial", "analogias_complejas", "plan_de_redaccion", "conectores_logicos"]
+            "basico": ["suma", "resta", "conteo", "comparacion"],
+            "intermedio": ["multiplicacion", "division", "fracciones", "problemas_mixtos"],
+            "avanzado": ["operaciones_combinadas", "porcentajes", "geometria_avanzada", "proporciones"]
         }
 
         # Retornar el primer tipo para ese nivel
-        return tipos_por_nivel.get(nivel, ["sinonimos"])[0]
+        return tipos_por_nivel.get(nivel, ["suma"])[0]
 
     def _preparar_perfil_respuesta(self, perfil: Dict) -> Dict:
         """
@@ -277,7 +277,7 @@ class GeneradorVerbal:
         return {
             "estudiante_id": perfil.get("estudiante_id", "DEFAULT"),
             "grado": perfil.get("grado", "3-4"),
-            "nivel_lectura": perfil.get("nivel_lectura", "desarrollado"),
+            "nivel_matematicas": perfil.get("nivel_matematicas", "intermedio"),
             "estilo_aprendizaje": perfil.get("estilo_aprendizaje", "visual"),
             "velocidad_lectura": perfil.get("velocidad_lectura", "promedio"),
             "areas_interes": perfil.get("areas_interes_texto", "general")
@@ -304,7 +304,7 @@ class GeneradorVerbal:
         todos_ejercicios = []
         total_solicitado = len(tipos) * cantidad_por_tipo
 
-        print(f"\n📚 Generando {len(tipos)} tipos de ejercicios verbales...")
+        print(f"\n📚 Generando {len(tipos)} tipos de ejercicios...")
 
         for tipo in tipos:
             try:
@@ -314,7 +314,7 @@ class GeneradorVerbal:
                     cantidad=cantidad_por_tipo,
                     tipo_especifico=tipo
                 )
-                todos_ejercicios.extend(resultado["ejercicios_verbales"])
+                todos_ejercicios.extend(resultado["ejercicios_matematicas"])
 
             except Exception as e:
                 print(f"❌ Error generando tipo '{tipo}': {str(e)}")
@@ -331,25 +331,25 @@ class GeneradorVerbal:
             "success": len(todos_ejercicios) > 0,
             "mensaje": f"{len(todos_ejercicios)} ejercicios generados de {len(tipos)} tipos",
             "estudiante_id": estudiante_id,
-            "curso": CursoEnum.VERBAL.value,
+            "curso": CursoEnum.MATEMATICAS.value,
             "cantidad_solicitada": total_solicitado,
             "cantidad_generada": len(todos_ejercicios),
-            "ejercicios_matematicas": None,
-            "ejercicios_verbales": todos_ejercicios,
+            "ejercicios_matematicas": todos_ejercicios,
+            "ejercicios_verbales": None,
             "perfil_usado": self._preparar_perfil_respuesta(perfil),
-            "nivel_determinado": prompt_builder.determinar_nivel_desde_perfil(perfil, "verbal"),
+            "nivel_determinado": prompt_builder.determinar_nivel_desde_perfil(perfil, "matematicas"),
             "tiempo_generacion_segundos": round(tiempo_total, 2)
         }
 
 
 # Singleton
-generador_verbal = GeneradorVerbal()
+generador_matematicas = GeneradorMatematicas()
 
 
 if __name__ == "__main__":
-    # Test del GeneradorVerbal
+    # Test del GeneradorMatematicas
     print("=" * 70)
-    print("TEST: GeneradorVerbal")
+    print("TEST: GeneradorMatematicas")
     print("=" * 70)
 
     # Estudiante de ejemplo
@@ -357,11 +357,11 @@ if __name__ == "__main__":
 
     try:
         # Test 1: Generar 3 ejercicios simples
-        print("\n🧪 Test 1: Generar 3 ejercicios de sinónimos (nivel automático)")
-        resultado = generador_verbal.generar_ejercicios(
+        print("\n🧪 Test 1: Generar 3 ejercicios de suma (nivel automático)")
+        resultado = generador_matematicas.generar_ejercicios(
             estudiante_id=estudiante_test,
             cantidad=3,
-            tipo_especifico="sinonimos"
+            tipo_especifico="suma"
         )
 
         print(f"\n✅ Resultado:")
@@ -372,20 +372,19 @@ if __name__ == "__main__":
         print(f"  - Tiempo: {resultado['tiempo_generacion_segundos']}s")
 
         # Mostrar primer ejercicio
-        if resultado["ejercicios_verbales"]:
-            primer_ejercicio = resultado["ejercicios_verbales"][0]
+        if resultado["ejercicios_matematicas"]:
+            primer_ejercicio = resultado["ejercicios_matematicas"][0]
             print(f"\n📝 Primer ejercicio generado:")
             print(f"  ID: {primer_ejercicio.id}")
             print(f"  Título: {primer_ejercicio.titulo}")
-            print(f"  Enunciado: {primer_ejercicio.enunciado}")
+            print(f"  Enunciado: {primer_ejercicio.enunciado[:100]}...")
             print(f"  Opciones: {len(primer_ejercicio.opciones)}")
             print(f"  Respuesta correcta: {primer_ejercicio.respuesta_correcta}")
             print(f"  Nivel: {primer_ejercicio.nivel}")
             print(f"  Tipo: {primer_ejercicio.tipo}")
-            print(f"  Palabra clave: {primer_ejercicio.palabra_clave}")
 
         print("\n" + "=" * 70)
-        print("✅ GeneradorVerbal funcionando correctamente")
+        print("✅ GeneradorMatematicas funcionando correctamente")
         print("=" * 70)
 
     except Exception as e:

@@ -11,7 +11,7 @@ from datetime import datetime
 from .gemini_client import gemini_client
 from .perfil_adapter import perfil_adapter
 from .prompt_builder import prompt_builder
-from ..models.ejercicio import (
+from models.ejercicio import (
     EjercicioMatematicas,
     NivelDificultad,
     TipoEjercicioMatematicas,
