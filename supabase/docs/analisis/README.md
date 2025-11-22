@@ -1,230 +1,66 @@
-# Análisis del Sistema
+# Documentación de Análisis - Sistema Educativo Adaptativo
 
-Esta carpeta contiene toda la documentación de análisis, diseño y arquitectura del Sistema Educativo Adaptativo.
+## 📋 Documentos Principales
 
-## 📊 Documentos Disponibles
+### 1. **ANALISIS.md**
+Análisis completo del sistema educativo adaptativo multi-colegio.
 
-### 📄 [ANALISIS.md](./ANALISIS.md)
-**Análisis completo del modelo de negocio**
-
-Este documento contiene:
-- Resumen ejecutivo del sistema
-- Modelo de negocio multi-colegio
-- Componentes principales (colegios, apoderados, estudiantes, perfiles)
-- Sistema de perfilamiento psicopedagógico (10 dimensiones)
+**Contenido:**
+- Resumen ejecutivo
+- Objetivo del sistema
+- Usuarios y roles
+- Componentes principales (gestión de colegios, apoderados, estudiantes, perfilamiento)
+- Sistema de clasificación (10 dimensiones psicopedagógicas)
 - Generación de ejercicios con IA
-- Sistema de sesiones y respuestas
+- Esquema de base de datos
+- ✅ 24 preguntas clave respondidas con definiciones del proyecto
+- Sistema adaptativo sin ML complejo (análisis de métricas)
 - Flujo de negocio completo
-- Casos de uso por rol
-- Ejemplos de datos
-- **24 preguntas clave** para definir detalles del proyecto
-- Recomendaciones técnicas y de implementación
 
-**Audiencia:** Product Owners, Analistas, Desarrolladores nuevos
+**Uso:** Documento de referencia principal para entender el negocio completo.
 
 ---
 
-### 🗄️ [DIAGRAMA_BD.md](./DIAGRAMA_BD.md)
-**Diagrama de base de datos y arquitectura técnica**
+### 2. **LOGICA_Y_PROCESOS.md**
+Lógica de negocio, procesos y relaciones del sistema.
 
-Este documento contiene:
-- Diagrama de Entidad-Relación (ERD) completo en ASCII
-- Descripción detallada de todas las tablas
-- Relaciones y cardinalidades
-- Índices críticos para performance
-- Políticas RLS (Row Level Security)
-- Constraints y validaciones
-- Triggers automáticos
-- Vistas materializadas sugeridas
-- Estimación de almacenamiento por volumen
+**Contenido:**
+- Modelo de datos y relaciones (diagramas)
+- 6 procesos de negocio principales con diagramas Mermaid
+- Lógica de clasificación de perfiles (código Python/JavaScript)
+- Sistema de generación de credenciales (prefijo + código colegio + nombre)
+- Lógica de generación de ejercicios con Gemini AI
+- Sistema adaptativo (análisis de métricas, refinamiento de perfiles)
+- Flujos de autenticación por rol
+- Reglas de negocio críticas
+- Estados y transiciones
+- Validaciones y constraints
+- Casos de uso detallados
 
-**Audiencia:** Desarrolladores, DBAs, Arquitectos
-
----
-
-## 🎯 ¿Por Dónde Empezar?
-
-### Si eres nuevo en el proyecto
-
-1. **Lee primero**: [ANALISIS.md](./ANALISIS.md)
-   - Secciones importantes:
-     - Resumen Ejecutivo
-     - Usuarios del Sistema
-     - Componentes Principales
-     - Flujo de Negocio
-
-2. **Luego revisa**: [DIAGRAMA_BD.md](./DIAGRAMA_BD.md)
-   - Secciones importantes:
-     - Diagrama de Relaciones (ERD)
-     - Esquema de tablas principales
-     - Relaciones Principales
-
-3. **Tiempo estimado**: 1-2 horas para comprensión completa
-
-### Si ya conoces el sistema
-
-- **Referencia rápida de tablas**: [DIAGRAMA_BD.md](./DIAGRAMA_BD.md)
-- **Casos de uso**: [ANALISIS.md - Casos de Uso](./ANALISIS.md#casos-de-uso-principales)
-- **Preguntas pendientes**: [ANALISIS.md - Preguntas](./ANALISIS.md#preguntas-para-definir-detalles)
+**Uso:** Guía técnica para implementación de la lógica del sistema.
 
 ---
 
-## 🏗️ Arquitectura del Sistema
+## 📁 Archivos de Soporte
 
-### Niveles
+Los siguientes archivos se han movido a `docs/storage/` para mantener el análisis limpio:
 
-```
-┌─────────────────────────────────────┐
-│         FRONTEND (React/Next)       │
-│  - Interfaces de usuario            │
-│  - Componentes UI                   │
-└──────────────┬──────────────────────┘
-               │
-               ▼
-┌─────────────────────────────────────┐
-│    EDGE FUNCTIONS (TypeScript/Deno) │
-│  - Lógica de negocio                │
-│  - Integración con Gemini AI        │
-└──────────────┬──────────────────────┘
-               │
-               ▼
-┌─────────────────────────────────────┐
-│    BASE DE DATOS (PostgreSQL)       │
-│  - Colegios, Estudiantes, Perfiles  │
-│  - Ejercicios, Respuestas, Sesiones │
-└─────────────────────────────────────┘
-```
-
-### Módulos Principales
-
-1. **Gestión de Colegios**
-   - Registro institucional
-   - Datos legales (RUC, UGEL)
-   - Representantes
-
-2. **Gestión de Estudiantes**
-   - Importación masiva
-   - Código de alumno autogenerado
-   - Relación con apoderados
-
-3. **Perfilamiento Psicopedagógico**
-   - Formulario de 10 preguntas
-   - Clasificación con Gemini AI
-   - Recomendaciones pedagógicas
-
-4. **Generación de Ejercicios**
-   - Personalización por perfil
-   - Integración con Gemini AI
-   - Matemáticas y Verbal
-
-5. **Sistema de Práctica**
-   - Sesiones estructuradas
-   - Registro de respuestas
-   - Validación automática
-
-6. **Analytics**
-   - Estadísticas por estudiante
-   - Reportes por colegio
-   - Identificación de riesgo
+- **DIAGRAMA_BD.md** - Diagrama ERD de la base de datos
+- **clasificador.py** - Implementación de referencia en Python
+- **FACTIBILIDAD_ML_ADAPTATIVO_MVP.md** - Análisis de factibilidad del sistema adaptativo
+- **PROPUESTA_POOL_EJERCICIOS.md** - Propuesta de optimización para v2.0+
 
 ---
 
-## 📋 Información Clave del Modelo
+## 🚀 Próximos Pasos
 
-### Código de Alumno
-
-**Formato:** `AL{año}{colegio}{correlativo}`
-- Ejemplo: `AL2502340001`
-- 12 caracteres fijos
-- Reinicia cada año
-
-### Grados
-
-- 1° a 6° de primaria (individual)
-- Sin límites de edad (casos especiales)
-- Tabla separada para flexibilidad
-
-### IDs
-
-- **Todos autoincrementables** (SERIAL/BIGSERIAL)
-- No se usan UUIDs
-- Mejor performance para alto volumen
-
-### Perfiles
-
-- 10 dimensiones de clasificación
-- Categorías descriptivas
-- Nivel de riesgo (bajo, medio, alto)
-- Recomendaciones pedagógicas
+1. Revisar `ANALISIS.md` para entender el negocio completo
+2. Estudiar `LOGICA_Y_PROCESOS.md` para implementación técnica
+3. Comenzar con implementación de Edge Functions basándose en estos documentos
+4. Actualizar schema SQL según especificaciones del análisis
 
 ---
 
-## 🔄 Cambios Recientes
-
-### 2025-11-21
-
-- ✅ Eliminados límites de edad por grado
-- ✅ Todos los IDs cambiados a autoincrementables
-- ✅ Estructura de documentación reorganizada
-- ✅ Análisis completo actualizado con modelo multi-colegio
-
-### Pendientes
-
-- [ ] Definir 10 preguntas del formulario psicopedagógico
-- [ ] Especificar tipos de ejercicios por grado
-- [ ] Definir roles y autenticación
-- [ ] Plantilla de importación Excel
-- [ ] Currículo por grado (alineación MINEDU)
-
----
-
-## 📝 Preguntas Frecuentes
-
-### ¿Por qué un sistema multi-colegio?
-
-Permite gestionar múltiples instituciones desde una plataforma centralizada, facilitando:
-- Administración unificada
-- Comparativas entre colegios
-- Economía de escala
-- Actualizaciones centralizadas
-
-### ¿Cómo funciona el código de alumno?
-
-Se genera automáticamente al registrar estudiante:
-1. Sistema obtiene año actual
-2. Busca código de colegio
-3. Calcula próximo correlativo del año
-4. Genera: AL + año(2) + colegio(4) + correlativo(4)
-
-### ¿Qué pasa con estudiantes trasladados?
-
-- Mantienen su historial completo
-- Se puede cambiar el colegio
-- El código de alumno permanece igual
-- Estado cambia a "trasladado"
-
-### ¿Cómo se relacionan estudiantes y apoderados?
-
-Relación **muchos a muchos** (N:M):
-- Un estudiante puede tener múltiples apoderados
-- Un apoderado puede tener múltiples estudiantes (hermanos)
-- Se identifica un apoderado principal
-
----
-
-## 🛠️ Próximos Pasos
-
-Para implementar el sistema:
-
-1. **Revisar análisis** completo y responder preguntas pendientes
-2. **Crear migración** con schema actualizado
-3. **Actualizar seed** con datos de ejemplo
-4. **Implementar Edge Functions** actualizadas
-5. **Desarrollar frontend** según roles definidos
-
-Ver más detalles en [ANALISIS.md - Próximos Pasos](./ANALISIS.md#próximos-pasos-sugeridos)
-
----
-
-**Última actualización:** 2025-11-21  
-**Versión del análisis:** 2.0.0
+**Última actualización:** 22/11/2025  
+**Versión:** 1.0  
+**Estado:** Listo para implementación v1.0 (MVP)
