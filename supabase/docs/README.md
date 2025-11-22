@@ -4,43 +4,61 @@ Bienvenido a la documentación del backend de Supabase para el Sistema Educativo
 
 ## 📖 Guías Disponibles
 
-### 🚀 [SETUP.md](./SETUP.md)
-**Guía de instalación completa desde cero**
+### 📊 [analisis/](./analisis/)
+**Análisis completo del sistema y arquitectura de base de datos**
 
-Lee este documento primero si:
-- Es tu primera vez configurando el proyecto
-- Necesitas instalar Supabase CLI
-- Quieres desplegar las Edge Functions
-- Necesitas aplicar las migraciones
+Lee esta sección para:
+- Entender el modelo de negocio multi-colegio
+- Revisar el diagrama de relaciones (ERD)
+- Conocer las tablas y relaciones
+- Ver ejemplos de datos y casos de uso
 
-**Tiempo estimado:** 30-45 minutos
-
-**Incluye:**
-- ✅ Instalación de Supabase CLI
-- ✅ Obtención de credenciales
-- ✅ Configuración de proyecto local
-- ✅ Despliegue de Edge Functions
-- ✅ Configuración de tests
-- ✅ Checklist de verificación completo
+**Documentos:**
+- 📄 [ANALISIS.md](./analisis/ANALISIS.md) - Análisis completo del negocio
+- 🗄️ [DIAGRAMA_BD.md](./analisis/DIAGRAMA_BD.md) - Diagrama de base de datos
 
 ---
 
-### 🐛 [TROUBLESHOOTING.md](./TROUBLESHOOTING.md)
-**Solución de errores comunes**
+### 🚀 [setup/](./setup/)
+**Guías de instalación y resolución de problemas**
 
-Consulta este documento cuando:
+Consulta esta sección cuando:
+- Es tu primera vez configurando el proyecto
+- Necesitas instalar Supabase CLI
 - Encuentres errores al ejecutar Edge Functions
 - Los tests HTTP fallen
-- Gemini AI retorne errores
-- Necesites depurar problemas
 
-**Incluye:**
-- ❌ Errores de setup y soluciones
-- ❌ Errores de Edge Functions
-- ❌ Errores de base de datos
-- ❌ Errores en tests HTTP
-- ❌ Errores de Gemini AI
-- 🔄 Flujo de troubleshooting
+**Documentos:**
+- ⚙️ [instalacion.md](./setup/instalacion.md) - Guía completa de setup
+- 🐛 [troubleshooting.md](./setup/troubleshooting.md) - Solución de errores comunes
+
+---
+
+### 🛠️ [implements/](./implements/)
+**Scripts de implementación y despliegue**
+
+Lee esta sección para:
+- Ejecutar migraciones de base de datos
+- Aplicar seeds y datos de ejemplo
+- Desplegar en diferentes entornos
+- Scripts de backup y mantenimiento
+
+**Documentos:**
+- 📝 [README.md](./implements/README.md) - Índice de scripts disponibles
+
+---
+
+### 📝 [changelogs/](./changelogs/)
+**Registro histórico de cambios en producción**
+
+Consulta esta sección para:
+- Ver historial de versiones
+- Conocer cambios implementados
+- Revisar notas de migración
+- Seguir evolución del sistema
+
+**Documentos:**
+- 📋 [README.md](./changelogs/README.md) - Formato y registro de cambios
 
 ---
 
@@ -70,9 +88,22 @@ supabase/
 ├── README.md                          # Documentación principal del proyecto
 ├── docs/                              # 📚 Documentación detallada
 │   ├── README.md                      # Este archivo (índice)
-│   ├── SETUP.md                       # Guía de instalación completa
-│   ├── TROUBLESHOOTING.md             # Solución de errores
-│   └── FRONTEND_INTEGRATION.md        # Integración con frontends
+│   │
+│   ├── analisis/                      # 📊 Análisis del sistema
+│   │   ├── ANALISIS.md                # Análisis completo del negocio
+│   │   └── DIAGRAMA_BD.md             # Diagrama de base de datos
+│   │
+│   ├── setup/                         # 🚀 Instalación y configuración
+│   │   ├── instalacion.md             # Guía de instalación completa
+│   │   └── troubleshooting.md         # Solución de errores
+│   │
+│   ├── implements/                    # 🛠️ Scripts de implementación
+│   │   └── README.md                  # Índice de scripts
+│   │
+│   ├── changelogs/                    # 📝 Registro de cambios
+│   │   └── README.md                  # Formato y versionado
+│   │
+│   └── FRONTEND_INTEGRATION.md        # 🔌 Integración con frontends
 │
 ├── test/                              # 🧪 Tests HTTP
 │   ├── README.md                      # Guía de tests
@@ -104,19 +135,21 @@ supabase/
 
 ### 👨‍💻 Para Desarrolladores Nuevos
 
-1. **Leer:** [SETUP.md](./SETUP.md) completo
-2. **Ejecutar:** Todos los pasos del setup
-3. **Probar:** Ejecutar tests HTTP básicos
-4. **Leer:** [TROUBLESHOOTING.md](./TROUBLESHOOTING.md) por encima
-5. **Explorar:** Código de Edge Functions
+1. **Leer:** [analisis/ANALISIS.md](./analisis/ANALISIS.md) - Entender el negocio
+2. **Revisar:** [analisis/DIAGRAMA_BD.md](./analisis/DIAGRAMA_BD.md) - Conocer la estructura
+3. **Leer:** [setup/instalacion.md](./setup/instalacion.md) completo
+4. **Ejecutar:** Todos los pasos del setup
+5. **Probar:** Ejecutar tests HTTP básicos
+6. **Leer:** [setup/troubleshooting.md](./setup/troubleshooting.md) por encima
+7. **Explorar:** Código de Edge Functions
 
-**Tiempo total:** 1-2 horas
+**Tiempo total:** 2-3 horas
 
 ---
 
 ### 🔧 Para Mantenimiento y Debugging
 
-1. **Consultar:** [TROUBLESHOOTING.md](./TROUBLESHOOTING.md) primero
+1. **Consultar:** [setup/troubleshooting.md](./setup/troubleshooting.md) primero
 2. **Ver logs:**
    ```bash
    supabase functions logs <nombre-funcion> --tail
@@ -200,23 +233,32 @@ supabase db reset
 
 ## 🔍 Búsqueda Rápida de Problemas
 
+### "¿Cómo funciona el sistema?"
+→ Ver [analisis/ANALISIS.md](./analisis/ANALISIS.md)
+
+### "¿Cuál es la estructura de base de datos?"
+→ Ver [analisis/DIAGRAMA_BD.md](./analisis/DIAGRAMA_BD.md)
+
 ### "No puedo conectarme a Supabase"
-→ Ver [TROUBLESHOOTING.md - Errores de Setup](./TROUBLESHOOTING.md#errores-de-setup)
+→ Ver [setup/troubleshooting.md - Errores de Setup](./setup/troubleshooting.md#errores-de-setup)
 
 ### "Edge Function retorna 404"
-→ Ver [TROUBLESHOOTING.md - Function not found](./TROUBLESHOOTING.md#error-function-not-found)
+→ Ver [setup/troubleshooting.md - Function not found](./setup/troubleshooting.md#error-function-not-found)
 
 ### "Gemini AI no responde"
-→ Ver [TROUBLESHOOTING.md - Errores de Gemini AI](./TROUBLESHOOTING.md#errores-de-gemini-ai)
+→ Ver [setup/troubleshooting.md - Errores de Gemini AI](./setup/troubleshooting.md#errores-de-gemini-ai)
 
 ### "Tests HTTP fallan"
-→ Ver [TROUBLESHOOTING.md - Errores en Tests](./TROUBLESHOOTING.md#errores-en-tests)
+→ Ver [setup/troubleshooting.md - Errores en Tests](./setup/troubleshooting.md#errores-en-tests)
 
 ### "¿Cómo integro con mi frontend?"
 → Ver [FRONTEND_INTEGRATION.md](./FRONTEND_INTEGRATION.md)
 
 ### "Error de base de datos"
-→ Ver [TROUBLESHOOTING.md - Errores de Base de Datos](./TROUBLESHOOTING.md#errores-de-base-de-datos)
+→ Ver [setup/troubleshooting.md - Errores de Base de Datos](./setup/troubleshooting.md#errores-de-base-de-datos)
+
+### "¿Cómo llevo registro de cambios?"
+→ Ver [changelogs/README.md](./changelogs/README.md)
 
 ---
 
@@ -307,18 +349,26 @@ Si encuentras un bug o tienes una sugerencia:
 
 | Fecha | Cambio | Archivo |
 |-------|--------|---------|
+| 2025-11-21 | Reorganización de estructura docs/ en carpetas | Todos |
+| 2025-11-21 | Análisis completo del sistema multi-colegio | analisis/ANALISIS.md |
+| 2025-11-21 | Diagrama de base de datos detallado | analisis/DIAGRAMA_BD.md |
+| 2025-11-21 | Sistema de changelogs para producción | changelogs/ |
 | 2025-11-18 | Creación inicial de documentación completa | Todos |
-| 2025-11-18 | Agregar guía de troubleshooting | TROUBLESHOOTING.md |
+| 2025-11-18 | Agregar guía de troubleshooting | setup/troubleshooting.md |
 | 2025-11-18 | Agregar guía de integración frontend | FRONTEND_INTEGRATION.md |
 
 ---
 
 ## ✅ Checklist de Documentación
 
+- [x] Análisis completo del sistema
+- [x] Diagrama de base de datos (ERD)
 - [x] Guía de setup completa
 - [x] Documentación de troubleshooting
 - [x] Guía de integración frontend
 - [x] README de tests HTTP
+- [x] Estructura de changelogs
+- [x] Scripts de implementación
 - [x] Ejemplos de código TypeScript
 - [x] Comandos comunes documentados
 - [x] Mejores prácticas de seguridad
@@ -326,12 +376,16 @@ Si encuentras un bug o tienes una sugerencia:
 
 ---
 
-**Última actualización:** 18 de Noviembre, 2025
+**Última actualización:** 21 de Noviembre, 2025
 
-**Versión de documentación:** 1.0.0
+**Versión de documentación:** 2.0.0
 
 **Mantenido por:** Equipo de Desarrollo
 
 ---
 
-¿Necesitas ayuda? Empieza por [SETUP.md](./SETUP.md) si es tu primera vez, o [TROUBLESHOOTING.md](./TROUBLESHOOTING.md) si tienes problemas.
+¿Necesitas ayuda? 
+
+- **Primera vez:** Lee [analisis/ANALISIS.md](./analisis/ANALISIS.md) y [setup/instalacion.md](./setup/instalacion.md)
+- **Problemas:** Consulta [setup/troubleshooting.md](./setup/troubleshooting.md)
+- **Integración:** Revisa [FRONTEND_INTEGRATION.md](./FRONTEND_INTEGRATION.md)
